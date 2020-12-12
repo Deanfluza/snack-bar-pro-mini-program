@@ -58,13 +58,14 @@ wepy.app({
 <config>
 {
     pages: [
-      'pages/index'
-    ],
+      'pages/order/index',
+  ],
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
-    }
+      "backgroundTextStyle": 'light',
+      "navigationBarBackgroundColor": '#fff',
+      "navigationBarTitleText": 'WeChat',
+      "navigationBarTextStyle": 'black'
+    },
+    
 }
 </config>
