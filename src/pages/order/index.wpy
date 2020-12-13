@@ -1,0 +1,54 @@
+<style>
+  .shop {
+    min-height: 200px;
+    min-width: 200px;
+    max-height: 200px;
+    max-width: 200px;
+    border-radius: 100px;
+    border: 1px solid #ff5722;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40%;
+    margin-left: 25%;
+  }
+  .shopImg {
+    width: 64px;
+    height: 64px;
+  }
+
+  @keyframes circle-draw{
+    80% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  
+</style>
+<template>
+
+  <my-tabbar></my-tabbar>
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+  
+  wepy.page({
+    data: {
+      status: 'start'
+    },
+    methods: {
+      shop: () => {
+        console.log('click the button')
+      }
+    }
+  })
+</script>
+
+<config>
+  {
+    "usingComponents": {
+      "my-tabbar": "../../components/my-tabbar/index"
+    }
+  }
+</config>
