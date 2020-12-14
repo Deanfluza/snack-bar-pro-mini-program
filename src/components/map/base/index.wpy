@@ -1,0 +1,22 @@
+<template>
+  <canvas type="2d" id="myCanvas" style="width: 1000px; height: 500px"></canvas>
+  <station></station>
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    ready() {
+    
+    }
+  })
+</script>
+
+<config>
+  {
+    "usingComponents": {
+      "station": "../station/index"
+    }
+  }
+</config>
