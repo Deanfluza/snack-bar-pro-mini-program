@@ -1,6 +1,7 @@
 <template>
-  <canvas type="2d" id="myCanvas" style="width: 1000px; height: 500px"></canvas>
-  <station></station>
+  <scroll-view :scroll-x="true">
+    <image mode="heightFix" src="/static/image/map.png" style="height: 500px"/>
+  </scroll-view>
 </template>
 
 <script>
@@ -8,7 +9,7 @@
 
   wepy.component({
     ready() {
-    
+
     }
   })
 </script>
