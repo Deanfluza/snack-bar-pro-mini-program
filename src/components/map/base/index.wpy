@@ -1,6 +1,6 @@
 <template>
-  <scroll-view :scroll-x="true">
-    <image mode="heightFix" src="/static/image/map.png" style="height: 500px"/>
+  <scroll-view :scroll-x="true" id="myScrollView" style="width: {{scrollWidth}}px; height: {{scrollHeight}}px">
+    <image mode="heightFix" src="/static/image/B6_3F.png" style="height: {{scrollHeight}}px"/>
   </scroll-view>
 </template>
 
@@ -8,12 +8,19 @@
   import wepy from '@wepy/core'
 
   wepy.component({
+    data: {
+      scrollWidth: 400,
+      scrollHeight: 400
+    },
     ready() {
-
+      this.scrollWidth = wx.getSystemInfoSync().windowWidth
+      // - tabbar height
+      this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50
     }
   })
 </script>
-
+<style>
+</style>
 <config>
   {
     "usingComponents": {
