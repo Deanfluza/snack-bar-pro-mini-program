@@ -1,0 +1,38 @@
+<template>
+  <van-button @tap="showPopup" color="linear-gradient(to right, #ff6034, #ee0a24)" size="small" round="square">
+    完成订单
+  </van-button>
+  <complete-popup  :show="showPop" @close="onClose"></complete-popup>
+  <van-toast id="van-toast" />
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+  wepy.component({
+    data: {
+      showPop: false,
+    },
+    methods: {
+      showPopup: function() {
+        this.showPop = true
+      },
+      onClose: function() {
+        this.showPop = false
+      }
+    }
+  })
+</script>
+
+<style scoped>
+
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-button": "../../vant/button/index",
+      "complete-popup": "../complete-popup/index",
+      "van-toast": "../../components/vant/toast/index"
+    }
+  }
+</config>
