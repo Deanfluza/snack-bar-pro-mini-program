@@ -5,12 +5,14 @@
     show="{{ show }}"
     message="确认要送至坐标{{x}},{{y}}吗"
     show-cancel-button
-    @close="show = false"
+    bind:close="show = false"
+    bind:confirm="confirm"
   />
 </template>
 
 <script>
   import wepy from '@wepy/core'
+  import { goTarget } from '../../../api/car'
   
   wepy.component({
     props: {
@@ -25,6 +27,12 @@
     },
     data: {
       show: false
+    },
+    methods: {
+      async confirm() {
+        const result = await goTarget({x: this.x, y: this.y})
+        console.log(result)
+      }
     }
   })
 </script>
