@@ -1,4 +1,5 @@
-import axios from './dist/axios'
+// wepy not support axios module, so add the axios that alreayd build
+import axios from './axios/axios'
 
 const baseURL = 'http://47.107.47.116:81'
 
