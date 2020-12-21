@@ -25,7 +25,9 @@ module.exports = {
         '@babel/preset-env'
       ],
       plugins: [
-        '@wepy/babel-plugin-import-regenerator'
+        '@wepy/babel-plugin-import-regenerator',
+        'transform-export-extensions',
+        'syntax-export-extensions'
       ]
     }
   },

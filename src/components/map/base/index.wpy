@@ -1,6 +1,7 @@
 <template>
-  <scroll-view :scroll-x="true" id="myScrollView" style="width: {{scrollWidth}}px; height: {{scrollHeight}}px">
-    <image mode="heightFix" src="/static/image/B6_3F.png" style="height: {{scrollHeight}}px"/>
+  <scroll-view :scroll-x="true" :style="{width: scrollWidth + 'px', height: scrollHeight + 'px'}">
+    <point v-for="position in positionArr" :x="position.x" :y="position.y"/>
+    <image mode="heightFix" src="/static/image/B6_3F.png" :style="{height: scrollHeight + 'px'}"/>
   </scroll-view>
 </template>
 
@@ -9,22 +10,33 @@
 
   wepy.component({
     data: {
-      scrollWidth: 400,
-      scrollHeight: 400
+      scrollWidth: 0,
+      scrollHeight: 0,
+      positionArr: [
+        {
+          x: 100,
+          y: 100
+        },
+        {
+          x: 200,
+          y: 100
+        }
+      ]
     },
     ready() {
       this.scrollWidth = wx.getSystemInfoSync().windowWidth
-      // - tabbar height
+      // -tabbar height
       this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50
     }
   })
 </script>
 <style>
+
 </style>
 <config>
   {
     "usingComponents": {
-      "station": "../station/index"
+      "point": "../point/index"
     }
   }
 </config>

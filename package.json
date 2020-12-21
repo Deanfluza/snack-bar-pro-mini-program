@@ -4,7 +4,7 @@
   "description": "snack bar pro mini program",
   "main": "weapp/app.js",
   "scripts": {
-    "dev": "./node_modules/.bin/wepy build --no-cache --watch",
+    "dev": "./node_modules/.bin/wepy build --no-cache --watch --log trace",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache",
     "clean": "rm -rf weapp",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,12 +16,15 @@
   "author": "HUANGDE4 <dean.huang@cargosmart.com>",
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-syntax-export-extensions": "^7.0.0-beta.32",
     "@vant/weapp": "^1.6.1",
     "@wepy/core": "^2.0.0-alpha.16",
     "@wepy/x": "^2.0.2",
     "axios": "^0.21.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
     "cax": "^1.3.2",
-    "miniprogram-slide-view": "0.0.3"
+    "miniprogram-slide-view": "0.0.3",
+    "wepy-async-function": "^1.4.7"
   },
   "devDependencies": {
     "@wepy/cli": "^2.0.0-alpha.28",
