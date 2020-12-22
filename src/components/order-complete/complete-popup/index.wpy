@@ -1,0 +1,118 @@
+<template>
+  <van-popup show="{{show}}" bind:close="onClose" position="bottom" custom-style="height: 30%;"  closeable close-icon-position="top-right" round>
+    <view class="container">
+      <van-row class="titleRowCls"><van-icon name="orders-o" size="x-large" color="red"/><span style="font-size: x-large">确认完成</span></van-row>
+
+      <van-divider custom-style="margin: 5px 0px 5px 0px" contentPosition="center">评价</van-divider>
+
+      <van-row class="rowCls">
+        <van-col span="10" class="colCls"><van-icon color="red" name="logistics" />  快速送达</van-col>
+        <van-col span="6">
+          <van-rate class="deliverSpeed" value="{{ speedRate }}" bind:change="setSpeedRate" />
+        </van-col>
+      </van-row>
+
+      <van-row class="rowCls">
+        <van-col span="10"><van-icon color="red" name="location" />   位置准确</van-col>
+        <van-col span="6">
+          <van-rate class="deliverAccuracy" value="{{ accuracyRate }}" bind:change="setAccuracyRate" />
+        </van-col>
+      </van-row>
+
+      <van-row class="rowCls" gutter="30">
+        <van-col span="12">
+          <van-button @tap="submit" color="linear-gradient(to right, #71b1f3, #1989fa)" size="small" round="square">提交</van-button>
+        </van-col>
+        <van-col span="12">
+          <van-button @tap="onClose" type="default" size="small" round="square">取消</van-button>
+        </van-col>
+      </van-row>
+    </view>
+  </van-popup>
+
+  <van-overlay show="{{ showOverlay }}" >
+    <view class="center">
+      <van-loading type="spinner" />
+    </view>
+  </van-overlay>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  import Toast from '../../vant/toast/toast'
+  import { goTarget } from '../../../api/car'
+
+  wepy.component({
+    data: {
+      showOverlay: false,
+      speedRate: 3,
+      accuracyRate: 3,
+    },
+    props: {
+      show: Boolean
+    },
+
+    methods: {
+      setSpeedRate: function(event) {
+        this.speedRate = event.detail
+      },
+      setAccuracyRate: function(event) {
+        this.accuracyRate = event.detail
+      },
+      onClose: function() {
+        this.show = false
+        this.$emit('close',this.show)
+      },
+      async submit() {
+        this.onClose();
+        this.showOverlay = true;
+        // const result = await goTarget({x: this.x, y: this.y})
+        var that = this;
+        setTimeout(function() {
+          Toast.success('成功');
+          that.showOverlay = false;
+          that.$parent.afterSubmit();
+        },3000)
+      },
+    }
+  })
+</script>
+
+<style scoped>
+  .rowCls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px;
+  }
+  .titleRowCls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-button": "../../vant/button/index",
+      "van-popup": "../../vant/popup/index",
+      "van-rate": "../../vant/rate/index",
+      "van-row": "../../vant/row/index",
+      "van-col": "../../vant/col/index",
+      "van-icon": "../../vant/icon/index",
+      "van-divider": "../../vant/divider/index",
+      "van-overlay": "../../vant/overlay/index",
+      "van-loading": "../../vant/loading/index"
+    }
+  }
+</config>
