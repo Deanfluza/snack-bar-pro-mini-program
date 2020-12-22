@@ -30,7 +30,7 @@
     </view>
   </van-popup>
 
-  <van-overlay show="{{ showOverlay }}" bind:click="onClickHide" >
+  <van-overlay show="{{ showOverlay }}" >
     <view class="center">
       <van-loading type="spinner" />
     </view>
@@ -40,6 +40,8 @@
 <script>
   import wepy from '@wepy/core';
   import Toast from '../../vant/toast/toast'
+  import { goTarget } from '../../../api/car'
+
   wepy.component({
     data: {
       showOverlay: false,
@@ -61,16 +63,17 @@
         this.show = false
         this.$emit('close',this.show)
       },
-
-      submit: function() {
+      async submit() {
         this.onClose();
         this.showOverlay = true;
+        // const result = await goTarget({x: this.x, y: this.y})
         var that = this;
         setTimeout(function() {
           Toast.success('成功');
           that.showOverlay = false;
+          that.$parent.afterSubmit();
         },3000)
-      }
+      },
     }
   })
 </script>
@@ -109,8 +112,7 @@
       "van-icon": "../../vant/icon/index",
       "van-divider": "../../vant/divider/index",
       "van-overlay": "../../vant/overlay/index",
-      "van-loading": "../../vant/loading/index",
-      "van-toast": "../../vant/notify/index"
+      "van-loading": "../../vant/loading/index"
     }
   }
 </config>

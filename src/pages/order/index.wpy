@@ -22,17 +22,18 @@
       stroke-dashoffset: 0;
     }
   }
-  
-  
+
+
 </style>
 <template>
   <map/>
   <my-tabbar></my-tabbar>
+  <van-toast id="van-toast" />
 </template>
 
 <script>
   import wepy from '@wepy/core'
-  
+
   wepy.page({
     data: {
       status: 'start'
@@ -49,7 +50,8 @@
   {
     "usingComponents": {
       "my-tabbar": "../../components/my-tabbar/index",
-      "map": "../../components/map/base/index"
+      "map": "../../components/map/base/index",
+      "van-toast": "../../components/vant/toast/index"
     }
   }
 </config>
