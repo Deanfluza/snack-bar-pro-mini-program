@@ -1,0 +1,149 @@
+<template>
+  <view style='margin-bottom: 110rpx;'>
+    <repeat wx:for="{{shopItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
+      <van-card
+        price="{{ shopItem.price }}"
+        desc="{{ shopItem.desc }}"
+        title="{{ shopItem.title }}"
+        thumb="{{ shopItem.thumb }}"
+        num="{{ shopItem.count }}"
+      >
+        <view slot="footer">
+          <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
+          <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
+        </view>
+      </van-card>
+    </repeat>
+  </view>
+  <view>
+    <van-submit-bar
+      price="{{ totalPrice }}"
+      button-text="Shop Car"
+      bind:submit="listSelectedItem"
+    />
+  </view>
+  <van-action-sheet show="{{ isShopCarShow }}" title='Shop Car' bind:close="submitBarClose">
+    <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="selectedItem" style='margin-bottom: 50rpx'>
+      <view style='margin-bottom: 10rpx'>{{selectedItem.title}} * {{selectedItem.count}}</view>
+    </repeat>
+    <van-button type="danger">Submit</van-button>
+  </van-action-sheet>
+
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.page({
+    data: {
+      shopItemList: null,
+      isShopCarShow: false,
+      selectedShopItemShowInCar: []
+    },
+    methods: {
+      plus: function(e) {
+        const index = e.currentTarget.dataset.index
+        this.shopItemList.find((shopItem) => shopItem.index === index).count++
+      },
+      minus: function(e) {
+        const index = e.currentTarget.dataset.index
+        if (this.shopItemList.find((shopItem) => shopItem.index === index).count > 0) {
+          this.shopItemList.find((shopItem) => shopItem.index === index).count--
+        }
+      },
+      getShopItemList: function() {
+        return [
+          {
+            index: '0',
+            price: 3.50,
+            title: '雪碧',
+            desc: '有糖的',
+            thumb: '/static/image/shopItemImage/sprite.jpg',
+            count: 0
+          },
+          {
+            index: '1',
+            price: 3.50,
+            title: '可口可乐',
+            desc: '有糖的',
+            thumb: '/static/image/shopItemImage/coco.jpg',
+            count: '0'
+          },
+          {
+            index: '2',
+            price: 5.00,
+            title: '卡乐比虾条',
+            desc: '好吃的',
+            thumb: '/static/image/shopItemImage/kalebi.jpeg',
+            count: 0
+          },
+          {
+            index: '3',
+            price: 3.50,
+            title: '乐事薯片青瓜味',
+            desc: '好吃的',
+            thumb: '/static/image/shopItemImage/leshi.jpg',
+            count: 0
+          },
+          {
+            index: '4',
+            price: 3.50,
+            title: '乐事薯片青瓜味',
+            desc: '好吃的',
+            thumb: '/static/image/shopItemImage/leshi.jpg',
+            count: 0
+          }
+        ]
+      },
+      listSelectedItem: function() {
+        this.isShopCarShow = true
+      },
+      submitBarClose: function() {
+        this.isShopCarShow = false
+      }
+    },
+    computed: {
+      selectedItemList: function() {
+        if (this.shopItemList) {
+          return this.shopItemList.filter((item) => item.count > 0)
+        } else {
+          return []
+        }
+      },
+      totalPrice: function() {
+        if (this.shopItemList && this.shopItemList.find((item) => item.count > 0)) {
+          return this.shopItemList
+            .filter((item) => item.count > 0)
+            .map((item) => item.count * item.price)
+            .reduce((prev, curr) => (prev + curr)) * 100
+        } else {
+          return 0
+        }
+      }
+    },
+    onLoad() {
+      this.shopItemList = this.getShopItemList()
+    }
+  })
+</script>
+
+<config>
+  {
+    "usingComponents": {
+      "car": "car.wpy",
+      "van-card": "../../components/vant/card/index",
+      "van-button": "../../components/vant/button/index",
+      "van-submit-bar": "../../components/vant/submit-bar/index",
+      "van-action-sheet": "../../components/vant/action-sheet/index"
+    }
+  }
+</config>
+
+<style>
+@keyframes circle-draw{
+  80% {
+    stroke-dashoffset: 0;
+  }
+}
+
+</style>
