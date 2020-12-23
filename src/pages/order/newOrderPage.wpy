@@ -1,0 +1,57 @@
+<template>
+  <van-cell icon=null label='2020.12.22 21:43' is-link bind:click="showOrderDetail">
+    <view slot="title">
+      <view class="van-cell-text">订单一号</view>
+      <van-tag type="danger">待完成</van-tag>
+    </view>
+  </van-cell>
+  <van-cell color="green" label='2020.12.22 21:43' is-link>
+    <view slot="title">
+      <view class="van-cell-text">订单二号</view>
+      <van-tag type="success">已完成</van-tag>
+    </view>
+  </van-cell>
+
+  <van-dialog
+    title="确认"
+    show="{{ show }}"
+    message="{{desc}}"
+    show-cancel-button
+    bind:close="show = false"
+    bind:confirm="confirm"
+  />
+</template>
+
+<script>
+import wepy from '@wepy/core'
+
+wepy.page({
+  data: {
+    desc: '可乐 x1\n薯片 x2',
+    show: false
+  },
+  methods: {
+    showOrderDetail: function() {
+      this.show = true
+    },
+    confirm: function() {
+      this.show = false
+    }
+  }
+})
+</script>
+
+<config>
+{
+"usingComponents": {
+"van-cell": "../../components/vant/cell/index",
+"van-tag": "../../components/vant/tag/index",
+"van-icon": "../../components/vant/icon/index",
+"van-button": "../../components/vant/button/index",
+"van-dialog": "../../components/vant/dialog/index"
+}
+}
+</config>
+
+<style>
+</style>
