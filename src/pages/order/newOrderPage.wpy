@@ -5,7 +5,7 @@
       <van-tag type="danger">待完成</van-tag>
     </view>
   </van-cell>
-  <van-cell color="green" label='2020.12.22 21:43' is-link>
+  <van-cell color="green" label='2020.12.22 21:43' is-link bind:click="showOrderDetail">
     <view slot="title">
       <view class="van-cell-text">订单二号</view>
       <van-tag type="success">已完成</van-tag>
@@ -24,6 +24,7 @@
 
 <script>
 import wepy from '@wepy/core'
+import axios from '../../utils/http'
 
 wepy.page({
   data: {
@@ -35,7 +36,16 @@ wepy.page({
       this.show = true
     },
     confirm: function() {
-      this.show = false
+      this.show = false;
+      let response = {};
+      let int = setInterval(() => {
+        axios.get('/api/move_base/result').then(res => {
+          if(res.data.reached) {
+            console.log('goal reached');
+          }
+        });
+      }, 1000);
+      
     }
   }
 })
