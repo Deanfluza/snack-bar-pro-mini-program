@@ -1,0 +1,30 @@
+<template>
+  <van-cell
+    is-link
+    title="{{ selectedAddr? selectedAddr : 'Please select address' }}"
+    link-type="navigateTo"
+    url="/pages/address/index"
+  />
+</template>
+
+<script>
+import wepy from '@wepy/core'
+
+wepy.component({
+  data: {
+    selectedAddr: undefined
+  }
+})
+</script>
+
+<style>
+
+</style>
+
+<config>
+{
+  "usingComponents": {
+    "van-cell": "../vant/cell/index",
+  }
+}
+</config>

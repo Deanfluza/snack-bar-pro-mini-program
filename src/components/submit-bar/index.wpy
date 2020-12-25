@@ -1,0 +1,34 @@
+<template>
+  <van-submit-bar
+    price="{{ 250 }}"
+    button-text="提交订单"
+    bind:submit="onSubmit"
+  />
+</template>
+
+<script>
+import wepy from '@wepy/core'
+import { goTarget } from '../../api/car'
+
+wepy.component({
+  data: {
+  },
+  methods: {
+    submit() {
+      goTarget({x: this.x, y: this.y});
+    }
+  }
+})
+</script>
+
+<style scoped>
+
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-submit-bar": "../vant/submit-bar"
+    }
+  }
+</config>
