@@ -29,6 +29,7 @@
   <address-selector></address-selector>
   <my-card :options="order.products"></my-card>
   <my-tabbar></my-tabbar>
+  <van-toast id="van-toast" />
 </template>
 
 <script>
@@ -58,6 +59,8 @@
       "my-tabbar": "../../components/my-tabbar/index",
       "address-selector": "../../components/address-selector/index",
       "my-card": "../../components/my-card/index"
+      "map": "../../components/map/base/index",
+      "van-toast": "../../components/vant/toast/index"
     }
   }
 </config>

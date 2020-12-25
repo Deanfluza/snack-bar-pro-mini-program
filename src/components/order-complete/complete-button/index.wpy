@@ -1,0 +1,44 @@
+<template>
+  <van-button @click="showPopup" :disabled="isCompleted" color="linear-gradient(to right, #ff6034, #ee0a24)" size="small" round="square">
+    {{buttonText}}
+  </van-button>
+  <complete-popup  :show="showPop" @close="onClose"></complete-popup>
+  <van-toast id="van-toast" />
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+      isCompleted: false,
+      showPop: false,
+      buttonText: '完成订单'
+    },
+    methods: {
+      showPopup: function() {
+        this.showPop = true
+      },
+      onClose: function() {
+        this.showPop = false
+      },
+      afterSubmit: function() {
+        this.isCompleted = true;
+        this.buttonText = '订单已完成'
+      }
+    }
+  })
+</script>
+
+<style scoped>
+
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-button": "../../vant/button/index",
+      "complete-popup": "../complete-popup/index"
+    }
+  }
+</config>
