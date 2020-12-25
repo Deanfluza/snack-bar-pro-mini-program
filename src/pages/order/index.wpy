@@ -26,7 +26,8 @@
 
 </style>
 <template>
-  <map/>
+  <address-selector></address-selector>
+  <my-card :options="order.products"></my-card>
   <my-tabbar></my-tabbar>
   <van-toast id="van-toast" />
 </template>
@@ -36,11 +37,17 @@
 
   wepy.page({
     data: {
-      status: 'start'
+      status: 'start',
+      order: {
+        products: [
+          {price: 2.50, title: '可乐', thumb: '/static/image/coke.jpg', num: 1}
+        ],
+        address: ''
+      }
     },
     methods: {
       shop: () => {
-        console.log('click the button')
+        console.log(this)
       }
     }
   })
@@ -50,6 +57,8 @@
   {
     "usingComponents": {
       "my-tabbar": "../../components/my-tabbar/index",
+      "address-selector": "../../components/address-selector/index",
+      "my-card": "../../components/my-card/index"
       "map": "../../components/map/base/index",
       "van-toast": "../../components/vant/toast/index"
     }

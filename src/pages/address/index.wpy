@@ -1,0 +1,30 @@
+<template>
+  <map />
+</template>
+
+<script>
+import wepy from '@wepy/core'
+
+wepy.page({
+  data: {
+
+  },
+  methods: {
+    shop: () => {
+      console.log(this)
+    }
+  }
+})
+</script>
+
+<style>
+
+</style>
+
+<config>
+{
+  "usingComponents": {
+    "map": "../../components/map/base/index",
+  }
+}
+</config>
