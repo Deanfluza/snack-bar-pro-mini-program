@@ -1,0 +1,36 @@
+<template>
+  <van-card
+    wx:for="{{ options }}"
+    wx:key="index"
+    num="{{ item.num }}"
+    price="{{ item.price }}"
+    desc="null"
+    title="{{ item.title }}"
+    thumb="{{ item.thumb }}"
+  />
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+
+  wepy.component({
+    data: {
+      active: 1
+    },
+    props: {
+      options: Array
+    }
+  })
+</script>
+
+<style scoped>
+
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-card": "../vant/card/index"
+    }
+  }
+</config>
