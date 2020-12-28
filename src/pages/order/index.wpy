@@ -35,26 +35,19 @@
 
 <script>
   import wepy from '@wepy/core'
-
+  
   wepy.page({
-    onShow() {
-      let { $wx: { options } } = this
-      this.order.address = options
-    },
     data: {
-      status: 'start',
-      order: {
-        products: [
-          {price: 2.50, title: '可乐', thumb: '/static/image/coke.jpg', num: 1}
-        ],
-        address: {
-          title: 'Please select address'
-        }
-      }
+      status: 'start'
     },
     methods: {
       shop: () => {
         console.log(this)
+      }
+    },
+    computed: {
+      order() {
+        return this.$app.$options.globalData.order
       }
     }
   })

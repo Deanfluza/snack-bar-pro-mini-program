@@ -27,8 +27,6 @@
     },
     methods: {
       goBack() {
-        console.log(this.$navigate)
-        this.$launch('newOrderPage')
         // wx.navigateTo({url: 'pages/map/base/index'})
       }
     },

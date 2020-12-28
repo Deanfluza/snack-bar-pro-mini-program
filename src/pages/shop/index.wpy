@@ -6,7 +6,7 @@
         desc="{{ shopItem.desc }}"
         title="{{ shopItem.title }}"
         thumb="{{ shopItem.thumb }}"
-        num="{{ shopItem.count }}"
+        num="{{ shopItem.num }}"
       >
         <view slot="footer">
           <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
@@ -24,16 +24,16 @@
   </view>
   <van-action-sheet show="{{ isShopCarShow }}" title='Shop Car' bind:close="submitBarClose">
     <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="selectedItem" style='margin-bottom: 50rpx'>
-      <view style='margin-bottom: 10rpx'>{{selectedItem.title}} * {{selectedItem.count}}</view>
+      <view style='margin-bottom: 10rpx'>{{selectedItem.title}} * {{selectedItem.num}}</view>
     </repeat>
-    <van-button type="danger">Submit</van-button>
+    <van-button type="danger" @click="navigateToOrder">Submit</van-button>
   </van-action-sheet>
 
 </template>
 
 <script>
   import wepy from '@wepy/core'
-
+  
   wepy.page({
     data: {
       shopItemList: null,
@@ -43,13 +43,17 @@
     methods: {
       plus: function(e) {
         const index = e.currentTarget.dataset.index
-        this.shopItemList.find((shopItem) => shopItem.index === index).count++
+        this.shopItemList.find((shopItem) => shopItem.index === index).num++
       },
       minus: function(e) {
         const index = e.currentTarget.dataset.index
-        if (this.shopItemList.find((shopItem) => shopItem.index === index).count > 0) {
-          this.shopItemList.find((shopItem) => shopItem.index === index).count--
+        if (this.shopItemList.find((shopItem) => shopItem.index === index).num > 0) {
+          this.shopItemList.find((shopItem) => shopItem.index === index).num--
         }
+      },
+      navigateToOrder() {
+        this.$app.$options.globalData.order.products = this.selectedItemList
+        this.$navigate('../order/index')
       },
       getShopItemList: function() {
         return [
@@ -59,7 +63,7 @@
             title: '雪碧',
             desc: '有糖的',
             thumb: '/static/image/shopItemImage/sprite.jpg',
-            count: 0
+            num: 0
           },
           {
             index: '1',
@@ -67,7 +71,7 @@
             title: '可口可乐',
             desc: '有糖的',
             thumb: '/static/image/shopItemImage/coco.jpg',
-            count: '0'
+            num: 0
           },
           {
             index: '2',
@@ -75,7 +79,7 @@
             title: '卡乐比虾条',
             desc: '好吃的',
             thumb: '/static/image/shopItemImage/kalebi.jpeg',
-            count: 0
+            num: 0
           },
           {
             index: '3',
@@ -83,7 +87,7 @@
             title: '乐事薯片青瓜味',
             desc: '好吃的',
             thumb: '/static/image/shopItemImage/leshi.jpg',
-            count: 0
+            num: 0
           },
           {
             index: '4',
@@ -91,7 +95,7 @@
             title: '乐事薯片青瓜味',
             desc: '好吃的',
             thumb: '/static/image/shopItemImage/leshi.jpg',
-            count: 0
+            num: 0
           }
         ]
       },
@@ -105,16 +109,16 @@
     computed: {
       selectedItemList: function() {
         if (this.shopItemList) {
-          return this.shopItemList.filter((item) => item.count > 0)
+          return this.shopItemList.filter((item) => item.num > 0)
         } else {
           return []
         }
       },
       totalPrice: function() {
-        if (this.shopItemList && this.shopItemList.find((item) => item.count > 0)) {
+        if (this.shopItemList && this.shopItemList.find((item) => item.num > 0)) {
           return this.shopItemList
-            .filter((item) => item.count > 0)
-            .map((item) => item.count * item.price)
+            .filter((item) => item.num > 0)
+            .map((item) => item.num * item.price)
             .reduce((prev, curr) => (prev + curr)) * 100
         } else {
           return 0
@@ -130,7 +134,6 @@
 <config>
   {
     "usingComponents": {
-      "car": "car.wpy",
       "van-card": "../../components/vant/card/index",
       "van-button": "../../components/vant/button/index",
       "van-submit-bar": "../../components/vant/submit-bar/index",

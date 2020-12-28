@@ -19,6 +19,10 @@
   wepy.app({
     globalData: {
       userInfo: null,
+      order: {
+        address: {x: 0, y: 0, title: ''},
+        products: []
+      },
       homePose: {
         position: { x: 0, y: 0, z: 0 },
         orientation: { x: 0, y: 0, z: 0, w: 0, }
@@ -30,6 +34,7 @@
 <config>
   {
     "pages": [
+      "pages/shop/index",
       "pages/order/index",
       "pages/address/index"
     ],
