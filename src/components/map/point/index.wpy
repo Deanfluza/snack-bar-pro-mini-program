@@ -12,8 +12,7 @@
 
 <script>
   import wepy from '@wepy/core'
-  import { goTarget } from '../../../api/car'
-  
+
   wepy.component({
     props: {
       x: {
@@ -29,9 +28,9 @@
       show: false
     },
     methods: {
-      async confirm() {
-        const result = await goTarget({x: this.x, y: this.y})
-        console.log(result)
+      confirm() {
+        const target = {x: this.x, y: this.y, title: this.x + this.y + 'test'}
+        this.$emit('change', target)
       }
     }
   })

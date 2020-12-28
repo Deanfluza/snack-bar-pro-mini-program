@@ -1,7 +1,7 @@
 <template>
   <van-cell
     is-link
-    title="{{ selectedAddr? selectedAddr : 'Please select address' }}"
+    title="{{ title || 'Please select address' }}"
     link-type="navigateTo"
     url="/pages/address/index"
   />
@@ -9,11 +9,19 @@
 
 <script>
 import wepy from '@wepy/core'
+import store from '../../mixins/store'
 
 wepy.component({
   data: {
     selectedAddr: undefined
-  }
+  },
+  props: {
+    title: {
+      type: String,
+      default: 'Please select address'
+    }
+  },
+  mixins: [store]
 })
 </script>
 
