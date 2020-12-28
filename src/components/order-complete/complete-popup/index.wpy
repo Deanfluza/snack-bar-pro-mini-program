@@ -40,7 +40,7 @@
 <script>
   import wepy from '@wepy/core';
   import Toast from '../../vant/toast/toast'
-  import { goTarget } from '../../../api/car'
+  import { backHome } from '../../../api/car'
 
   wepy.component({
     data: {
@@ -63,16 +63,19 @@
         this.show = false
         this.$emit('close',this.show)
       },
-      async submit() {
+      submit: function() {
         this.onClose();
         this.showOverlay = true;
-        // const result = await goTarget({x: this.x, y: this.y})
         var that = this;
-        setTimeout(function() {
-          Toast.success('成功');
+        backHome().then(function(result) {
+          if (result) {
+            Toast.success('成功');
+            that.$parent.afterSubmit();
+          } else {
+            Toast.fail('失败');
+          }
           that.showOverlay = false;
-          that.$parent.afterSubmit();
-        },3000)
+        })
       },
     }
   })
