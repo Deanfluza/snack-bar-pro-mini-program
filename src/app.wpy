@@ -36,6 +36,7 @@
     "pages": [
       "pages/shop/index",
       "pages/order/index",
+      "pages/order/newOrderPage",
       "pages/address/index"
     ],
     "window": {

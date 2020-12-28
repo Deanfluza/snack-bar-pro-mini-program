@@ -30,9 +30,8 @@
     methods: {
       confirm() {
         const target = {x: this.x, y: this.y, title: this.x + this.y + 'test'}
-        // this.goTargetTest(this.x, this.y)
-        // this.$navigate('../../pages/order/index')
-        this.$emit('change', target)
+        this.$app.$options.globalData.order.address = target
+        this.$emit('change')
       }
     }
   })

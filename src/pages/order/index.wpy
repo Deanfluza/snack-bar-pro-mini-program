@@ -30,12 +30,16 @@
   <my-card :options="order.products"></my-card>
   <my-tabbar></my-tabbar>
   <van-toast id="van-toast" />
-  <submit-bar :point="order.address"></submit-bar>
+  <van-submit-bar
+    price="{{ 250 }}"
+    button-text="提交订单"
+    bind:submit="submitOrder"
+  />
 </template>
 
 <script>
   import wepy from '@wepy/core'
-  
+  import { goTarget } from '../../api/car'
   wepy.page({
     data: {
       status: 'start'
@@ -43,6 +47,10 @@
     methods: {
       shop: () => {
         console.log(this)
+      },
+      async submitOrder() {
+        await goTarget({position: {x: 2.43486119341, y: 1.216540979, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.747691761442, w: 0.664045954638}})
+        this.$navigate('newOrderPage')
       }
     },
     computed: {
@@ -60,8 +68,8 @@
       "address-selector": "../../components/address-selector/index",
       "submit-bar": "../../components/submit-bar/index",
       "my-card": "../../components/my-card/index",
-      "map": "../../components/map/base/index",
-      "van-toast": "../../components/vant/toast/index"
+      "van-toast": "../../components/vant/toast/index",
+      "van-submit-bar": "../../components/vant/submit-bar"
     }
   }
 </config>

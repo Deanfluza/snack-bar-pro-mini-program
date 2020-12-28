@@ -1,7 +1,7 @@
 <template>
   <scroll-view :scroll-x="true" :style="{width: scrollWidth + 'px', height: scrollHeight + 'px'}">
     <point @change="goBack" v-for="position in positionArr" :x="position.x" :y="position.y"/>
-    <image mode="heightFix" src="/static/image/B6_3F.png" :style="{height: scrollHeight + 'px'}"/>
+    <image mode="heightFix" src="/static/image/17F.png" :style="{height: scrollHeight + 'px'}"/>
   </scroll-view>
 </template>
 
@@ -14,19 +14,18 @@ wepy.page({
     scrollHeight: 0,
     positionArr: [
       {
-        x: 100,
+        x: 400,
         y: 100
       },
       {
-        x: 200,
-        y: 100
+        x: 270,
+        y: 350
       }
     ]
   },
   methods: {
     goBack(point) {
       this.$navigate('../order/index', point)
-      // wx.navigateTo({url: 'pages/map/base/index'})
     }
   },
   ready() {
