@@ -2,7 +2,7 @@
   <van-submit-bar
     price="{{ 250 }}"
     button-text="提交订单"
-    bind:submit="onSubmit"
+    bind:submit="submit"
   />
 </template>
 
@@ -11,11 +11,15 @@ import wepy from '@wepy/core'
 import { goTarget } from '../../api/car'
 
 wepy.component({
+  props: {
+    point: Object
+  },
   data: {
   },
   methods: {
     submit() {
-      goTarget({x: this.x, y: this.y});
+      console.log(this.point)
+      // goTarget(this.point);
     }
   }
 })

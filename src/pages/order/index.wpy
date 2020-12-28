@@ -26,24 +26,30 @@
 
 </style>
 <template>
-  <address-selector></address-selector>
+  <address-selector :title="order.address.title"></address-selector>
   <my-card :options="order.products"></my-card>
   <my-tabbar></my-tabbar>
   <van-toast id="van-toast" />
-  <submit-bar></submit-bar>
+  <submit-bar :point="order.address"></submit-bar>
 </template>
 
 <script>
   import wepy from '@wepy/core'
 
   wepy.page({
+    onShow() {
+      let { $wx: { options } } = this
+      this.order.address = options
+    },
     data: {
       status: 'start',
       order: {
         products: [
           {price: 2.50, title: '可乐', thumb: '/static/image/coke.jpg', num: 1}
         ],
-        address: ''
+        address: {
+          title: 'Please select address'
+        }
       }
     },
     methods: {

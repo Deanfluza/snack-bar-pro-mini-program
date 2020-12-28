@@ -12,9 +12,7 @@
 
 <script>
   import wepy from '@wepy/core'
-  // import { goTarget } from '../../../api/car'
-  import store from '../../../mixins/store'
-  
+
   wepy.component({
     props: {
       x: {
@@ -31,11 +29,10 @@
     },
     methods: {
       confirm() {
-        console.log('test in point')
-        // this.goTarget(this.x, this.y)
+        const target = {x: this.x, y: this.y, title: this.x + this.y + 'test'}
+        this.$emit('change', target)
       }
-    },
-    mixins: [store]
+    }
   })
 </script>
 
