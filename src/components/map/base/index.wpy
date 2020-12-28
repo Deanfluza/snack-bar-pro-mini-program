@@ -1,14 +1,16 @@
 <template>
   <scroll-view :scroll-x="true" :style="{width: scrollWidth + 'px', height: scrollHeight + 'px'}">
-    <point v-for="position in positionArr" :x="position.x" :y="position.y"/>
+    <point @change="goBack" v-for="position in positionArr" :x="position.x" :y="position.y"/>
     <image mode="heightFix" src="/static/image/B6_3F.png" :style="{height: scrollHeight + 'px'}"/>
   </scroll-view>
 </template>
 
 <script>
   import wepy from '@wepy/core'
+  import store from '../../../mixins/store'
 
-  wepy.component({
+  wepy.page({
+    mixins: [store],
     data: {
       scrollWidth: 0,
       scrollHeight: 0,
@@ -22,6 +24,13 @@
           y: 100
         }
       ]
+    },
+    methods: {
+      goBack() {
+        console.log(this.$navigate)
+        this.$launch('newOrderPage')
+        // wx.navigateTo({url: 'pages/map/base/index'})
+      }
     },
     ready() {
       this.scrollWidth = wx.getSystemInfoSync().windowWidth
