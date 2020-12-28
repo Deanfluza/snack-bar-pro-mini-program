@@ -1,52 +1,131 @@
 <template>
-  <van-cell icon=null label='2020.12.22 21:43' is-link bind:click="showOrderDetail">
-    <view slot="title">
-      <view class="van-cell-text">订单一号</view>
-      <van-tag type="danger">待完成</van-tag>
-    </view>
-  </van-cell>
-  <van-cell color="green" label='2020.12.22 21:43' is-link bind:click="showOrderDetail">
-    <view slot="title">
-      <view class="van-cell-text">订单二号</view>
-      <van-tag type="success">已完成</van-tag>
-    </view>
-  </van-cell>
+  <repeat wx:for="{{orderListModel}}" wx:key="orderNumber" wx:for-index="orderNumber" wx:for-item="order">
+    <van-cell icon=null label='{{ order.createDateTime }}'
+              is-link
+              bind:click="showOrderDetail"
+              data-orderNumber ="{{order.orderNumber}}"
+    >
+
+      <view slot="title">
+        <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
+        <van-tag type="{{ order.stautsTag.type }}">{{ order.stautsTag.text }}</van-tag>
+      </view>
+    </van-cell>
+  </repeat>
 
   <van-dialog
-    title="确认"
-    show="{{ show }}"
-    message="{{desc}}"
+    title="order: {{ selectedOrderNumber }}"
+    show="{{ isShowOrderDetailDialog }}"
+    message="{{ orderDetailString }}"
     show-cancel-button
-    bind:close="show = false"
-    bind:confirm="confirm"
+    bind:close="closeOrderDetail"
+    bind:confirm="completeOrder"
   />
 </template>
 
 <script>
 import wepy from '@wepy/core'
-import axios from '../../utils/http'
 
 wepy.page({
   data: {
-    desc: '可乐 x1\n薯片 x2',
-    show: false
+    isShowOrderDetailDialog: false,
+    intervalId: 0,
+    orderList: [],
+    selectedOrderNumber: null
+  },
+  computed: {
+    orderDetailString: function() {
+      const shopItemList = this.getOrderDetail(this.selectedOrderNumber)
+      if (shopItemList && shopItemList.length > 0) {
+        return shopItemList.reduce((accumulator, item) => accumulator + `${item.title} x ${item.count}\n`, '')
+      } else {
+        return ''
+      }
+    },
+    orderListModel: function() {
+      let model = this.orderList
+      model.forEach((order) => {
+        if (order.orderStatus === 'processing') {
+          order.stautsTag = {
+            type: 'danger',
+            text: 'Processing'
+          }
+        } else if (order.orderStatus === 'completed') {
+          order.stautsTag = {
+            type: 'success',
+            text: 'Completed'
+          }
+        }
+      })
+      return model
+    }
   },
   methods: {
-    showOrderDetail: function() {
-      this.show = true
+    showOrderDetail: function(e) {
+      this.selectedOrderNumber = e.currentTarget.dataset.ordernumber
+      this.isShowOrderDetailDialog = true
     },
-    confirm: function() {
-      this.show = false;
-      let response = {};
-      let int = setInterval(() => {
-        axios.get('/api/move_base/result').then(res => {
-          if(res.data.reached) {
-            console.log('goal reached');
+    completeOrder: function() {
+      this.intervalId = setInterval(() => {
+        console.log('1')
+      }, 1000)
+
+      this.orderList.find(order => order.orderNumber === this.selectedOrderNumber).orderStatus = 'completed'
+      this.isShowOrderDetailDialog = false``
+    },
+    closeOrderDetail: function() {
+      clearInterval(this.intervalId)
+      this.isShowOrderDetailDialog = false
+    },
+    getOrderHistory: function() {
+      return [
+        {
+          orderNumber: '1',
+          orderStatus: 'processing',
+          createDateTime: '2020-12-27T18:24:00',
+          completeDateTime: ''
+        },
+        {
+          orderNumber: '2',
+          orderStatus: 'completed',
+          createDateTime: '2020-12-25T16:24:00',
+          completeDateTime: '2020-12-25T16:34:00'
+        }
+      ]
+    },
+    getOrderDetail: function(orderNumber) {
+      const orderList = {
+        '1': [
+          {
+            price: 3.50,
+            title: '雪碧',
+            desc: '有糖的',
+            thumb: '/static/image/shopItemImage/sprite.jpg',
+            count: 1
+          },
+          {
+            price: 3.50,
+            title: '可口可乐',
+            desc: '有糖的',
+            thumb: '/static/image/shopItemImage/coco.jpg',
+            count: 1
           }
-        });
-      }, 1000);
-      
+        ],
+        '2': [
+          {
+            price: 3.50,
+            title: '雪碧',
+            desc: '有糖的',
+            thumb: '/static/image/shopItemImage/sprite.jpg',
+            count: 2
+          }
+        ]
+      }
+      return orderList[orderNumber]
     }
+  },
+  onLoad() {
+    this.orderList = this.getOrderHistory()
   }
 })
 </script>
