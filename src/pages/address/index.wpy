@@ -4,8 +4,10 @@
 
 <script>
 import wepy from '@wepy/core'
+import store from '../../mixins/store'
 
 wepy.page({
+  mixins: [store],
   data: {
 
   },

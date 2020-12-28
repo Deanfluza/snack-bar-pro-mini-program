@@ -12,7 +12,8 @@
 
 <script>
   import wepy from '@wepy/core'
-  import { goTarget } from '../../../api/car'
+  // import { goTarget } from '../../../api/car'
+  import store from '../../../mixins/store'
   
   wepy.component({
     props: {
@@ -29,11 +30,12 @@
       show: false
     },
     methods: {
-      async confirm() {
-        const result = await goTarget({x: this.x, y: this.y})
-        console.log(result)
+      confirm() {
+        console.log('test in point')
+        // this.goTarget(this.x, this.y)
       }
-    }
+    },
+    mixins: [store]
   })
 </script>
 
