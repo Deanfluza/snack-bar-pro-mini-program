@@ -1,7 +1,7 @@
 // wepy not support axios module, so add the axios that alreayd build
 import axios from './axios/axios'
 
-const baseURL = 'http://192.168.8.103:3001'
+const baseURL = 'http://47.107.47.116:81'
 
 axios.defaults.adapter = function(config) {
   return new Promise((resolve, reject) => {

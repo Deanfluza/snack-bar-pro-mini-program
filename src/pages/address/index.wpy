@@ -1,7 +1,7 @@
 <template>
-  <scroll-view :scroll-x="true" :style="{width: scrollWidth + 'px', height: scrollHeight + 'px'}">
-    <point @change="goBack" v-for="position in positionArr" :x="position.mapX" :y="position.mapY" :target="position.target"/>
-    <image mode="heightFix" src="/static/image/17F.png" :style="{height: scrollHeight + 'px'}"/>
+  <scroll-view :scroll-x="true" :style="{width: '100%', height: scrollHeight + 'px'}">
+    <point @change="goBack" v-for="position in positionArr" :x="position.mapX * xPositionPercentage" :y="position.mapY * yPositionPercentage" :target="position.target"/>
+    <image mode="heightFix" src="/static/image/17F.png" :style="{height: scrollHeight + 'px'}" id="map"/>
   </scroll-view>
 </template>
 
@@ -12,11 +12,13 @@ wepy.page({
   data: {
     scrollWidth: 0,
     scrollHeight: 0,
+    xPositionPercentage: 1,
+    yPositionPercentage: 1,
     positionArr: [
       // 正门中间
       {
-        mapX: 400,
-        mapY: 100,
+        mapX: 340,
+        mapY: 340,
         target: {
           title: '正门中间',
           position: {
@@ -35,7 +37,7 @@ wepy.page({
       // 直布罗陀门口
       {
         mapX: 270,
-        mapY: 350,
+        mapY: 290,
         target: {
           title: '直布罗陀门口',
           position: {
@@ -53,8 +55,8 @@ wepy.page({
       },
       // Home
       {
-        mapX: 0,
-        mapY: 0,
+        mapX: 290,
+        mapY: 450,
         target: {
           title: 'Home',
           position: {
@@ -66,7 +68,7 @@ wepy.page({
             x: 0.0,
             y: 0.0,
             z: 0.00310461688896,
-            w: 0.999995180665
+            w: 0.0
           }
         }
       }
@@ -78,9 +80,15 @@ wepy.page({
     }
   },
   ready() {
-    this.scrollWidth = wx.getSystemInfoSync().windowWidth
+    // this.scrollWidth = wx.getSystemInfoSync().windowWidth
     // -tabbar height
     this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50
+    console.log(this.scrollHeight)
+    const originWidth = 863
+    const originHeight = 621
+    const resetWidth = originWidth * this.scrollHeight / originHeight
+    this.xPositionPercentage = resetWidth / 936.64
+    this.yPositionPercentage = this.scrollHeight / 674
   }
 })
 </script>
