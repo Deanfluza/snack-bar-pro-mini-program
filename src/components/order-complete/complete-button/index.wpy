@@ -23,7 +23,7 @@
         this.showPop = false
       },
       afterSubmit: function() {
-        this.isCompleted = true;
+        this.isCompleted = true
         this.buttonText = '订单已完成'
       }
     }

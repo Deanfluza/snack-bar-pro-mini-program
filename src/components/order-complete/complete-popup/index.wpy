@@ -38,15 +38,14 @@
 </template>
 
 <script>
-  import wepy from '@wepy/core';
+  import wepy from '@wepy/core'
   import Toast from '../../vant/toast/toast'
-  import { backHome } from '../../../api/car'
 
   wepy.component({
     data: {
       showOverlay: false,
       speedRate: 3,
-      accuracyRate: 3,
+      accuracyRate: 3
     },
     props: {
       show: Boolean
@@ -61,22 +60,16 @@
       },
       onClose: function() {
         this.show = false
-        this.$emit('close',this.show)
+        this.$emit('close', this.show)
       },
       submit: function() {
-        this.onClose();
-        this.showOverlay = true;
-        var that = this;
-        backHome().then(function(result) {
-          if (result) {
-            Toast.success('成功');
-            that.$parent.afterSubmit();
-          } else {
-            Toast.fail('失败');
-          }
-          that.showOverlay = false;
-        })
-      },
+        this.onClose()
+        this.showOverlay = true
+        setTimeout(() => {
+          this.showOverlay = false
+          Toast.success('成功')
+        }, 1500)
+      }
     }
   })
 </script>

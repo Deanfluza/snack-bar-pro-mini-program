@@ -50,7 +50,7 @@
       },
       async submitOrder() {
         await goTarget(this.$app.$options.globalData.order.address)
-        this.$navigate('newOrderPage')
+        this.$navigate('../orderHistory/index')
       }
     },
     computed: {
