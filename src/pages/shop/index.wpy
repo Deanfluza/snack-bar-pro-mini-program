@@ -23,10 +23,22 @@
     />
   </view>
   <van-action-sheet show="{{ isShopCarShow }}" title='Shop Car' bind:close="submitBarClose">
-    <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="selectedItem" style='margin-bottom: 50rpx'>
-      <view style='margin-bottom: 10rpx'>{{selectedItem.title}} * {{selectedItem.num}}</view>
+    <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
+      <van-card
+        price="{{ shopItem.price }}"
+        desc="{{ shopItem.desc }}"
+        title="{{ shopItem.title }}"
+        thumb="{{ shopItem.thumb }}"
+        num="{{ shopItem.num }}"
+      >
+        <view slot="footer">
+          <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
+          <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
+        </view>
+      </van-card>
     </repeat>
-    <van-button type="danger" @click="navigateToOrder">Submit</van-button>
+    <van-button type="danger" @click="navigateToOrder"
+                style='float: right; margin-right: 25px; margin-bottom: 2px'>Submit</van-button>
   </van-action-sheet>
 
 </template>

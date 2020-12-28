@@ -1,6 +1,6 @@
 <template>
   <repeat wx:for="{{orderListModel}}" wx:key="orderNumber" wx:for-index="orderNumber" wx:for-item="order">
-    <van-cell icon=null label='{{ order.createDateTime }}'
+    <van-cell icon="null" label="{{ order.createDateTime }}"
               is-link
               bind:click="showOrderDetail"
               data-orderNumber ="{{order.orderNumber}}"
@@ -8,7 +8,7 @@
 
       <view slot="title">
         <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
-        <van-tag type="{{ order.stautsTag.type }}">{{ order.stautsTag.text }}</van-tag>
+        <van-tag v-bind:type="order.stautsTag.type">{{ order.stautsTag.text }}</van-tag>
       </view>
     </van-cell>
   </repeat>
@@ -20,18 +20,24 @@
     show-cancel-button
     bind:close="closeOrderDetail"
     bind:confirm="completeOrder"
+    showConfirmButton="{{ isShowDialogConfirmButton }}"
   />
+  <order-comment :show="showPop" @close="onClose"></order-comment>
+  <van-toast id="van-toast" />
 </template>
 
 <script>
 import wepy from '@wepy/core'
+import { goTarget, getCarReachStatus } from '../../api/car'
 
 wepy.page({
   data: {
     isShowOrderDetailDialog: false,
     intervalId: 0,
     orderList: [],
-    selectedOrderNumber: null
+    selectedOrderNumber: null,
+    isShowDialogConfirmButton: false,
+    showPop: false
   },
   computed: {
     orderDetailString: function() {
@@ -47,8 +53,13 @@ wepy.page({
       model.forEach((order) => {
         if (order.orderStatus === 'processing') {
           order.stautsTag = {
-            type: 'danger',
+            type: 'warning',
             text: 'Processing'
+          }
+        } else if (order.orderStatus === 'reached') {
+          order.stautsTag = {
+            type: 'primary',
+            text: 'Car Reached'
           }
         } else if (order.orderStatus === 'completed') {
           order.stautsTag = {
@@ -58,23 +69,49 @@ wepy.page({
         }
       })
       return model
+    },
+    currentOrderNumber: function() {
+      if (this.orderList && this.orderList.length > 0) {
+        const order = this.orderList.find((order) => order.orderStatus !== 'completed')
+        return order ? order.orderNumber : ''
+      } else {
+        return ''
+      }
     }
   },
   methods: {
     showOrderDetail: function(e) {
       this.selectedOrderNumber = e.currentTarget.dataset.ordernumber
+      if (this.selectedOrderNumber === this.currentOrderNumber &&
+        this.orderList.find((order) => order.orderNumber === this.currentOrderNumber).orderStatus === 'reached') {
+        this.isShowDialogConfirmButton = true
+      } else {
+        this.isShowDialogConfirmButton = false
+      }
       this.isShowOrderDetailDialog = true
     },
     completeOrder: function() {
-      this.intervalId = setInterval(() => {
-        console.log('1')
-      }, 1000)
-
-      this.orderList.find(order => order.orderNumber === this.selectedOrderNumber).orderStatus = 'completed'
-      this.isShowOrderDetailDialog = false``
+      this.showPop = true
+      this.autoCompleteOrder()
+    },
+    autoCompleteOrder: function() {
+      this.orderList.find(order => order.orderNumber === this.currentOrderNumber).orderStatus = 'completed'
+      this.isShowOrderDetailDialog = false
+      this.isShowDialogConfirmButton = false
+      goTarget(this.$app.$options.globalData.homePose)
+    },
+    reachedEvent: function() {
+      clearInterval(this.intervalId)
+      let currentOrder = this.orderList.find((order) => order.orderNumber === this.currentOrderNumber)
+      currentOrder.orderStatus = 'reached'
+      this.isShowDialogConfirmButton = true
+      setTimeout(() => {
+        if (currentOrder.orderStatus === 'reached') {
+          this.autoCompleteOrder()
+        }
+      }, 60000)
     },
     closeOrderDetail: function() {
-      clearInterval(this.intervalId)
       this.isShowOrderDetailDialog = false
     },
     getOrderHistory: function() {
@@ -122,10 +159,25 @@ wepy.page({
         ]
       }
       return orderList[orderNumber]
+    },
+    onClose: function() {
+      this.showPop = false
     }
   },
   onLoad() {
     this.orderList = this.getOrderHistory()
+    this.intervalId = setInterval(() => {
+      getCarReachStatus()
+        .then((res) => {
+          const isReached = res.data.reached
+          if (isReached) {
+            this.reachedEvent()
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }, 1000)
   }
 })
 </script>
@@ -137,7 +189,9 @@ wepy.page({
 "van-tag": "../../components/vant/tag/index",
 "van-icon": "../../components/vant/icon/index",
 "van-button": "../../components/vant/button/index",
-"van-dialog": "../../components/vant/dialog/index"
+"van-dialog": "../../components/vant/dialog/index",
+"van-toast": "../../components/vant/toast/index",
+"order-comment": "../../components/order-complete/complete-popup/index"
 }
 }
 </config>
