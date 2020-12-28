@@ -18,7 +18,11 @@
 
   wepy.app({
     globalData: {
-      userInfo: null
+      userInfo: null,
+      order: {
+        address: {x: 0, y: 0, title: ''},
+        products: []
+      }
     }
   })
 
@@ -26,6 +30,7 @@
 <config>
   {
     "pages": [
+      "pages/shop/index",
       "pages/order/index",
       "pages/address/index"
     ],
