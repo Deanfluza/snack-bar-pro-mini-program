@@ -1,6 +1,6 @@
 <template>
   <scroll-view :scroll-x="true" :style="{width: scrollWidth + 'px', height: scrollHeight + 'px'}">
-    <point @change="goBack" v-for="position in positionArr" :x="position.x" :y="position.y"/>
+    <point @change="goBack" v-for="position in positionArr" :x="position.mapX" :y="position.mapY" :target="position.target"/>
     <image mode="heightFix" src="/static/image/17F.png" :style="{height: scrollHeight + 'px'}"/>
   </scroll-view>
 </template>
@@ -13,13 +13,62 @@ wepy.page({
     scrollWidth: 0,
     scrollHeight: 0,
     positionArr: [
+      // 正门中间
       {
-        x: 400,
-        y: 100
+        mapX: 400,
+        mapY: 100,
+        target: {
+          title: '正门中间',
+          position: {
+            x: 2.68363808079,
+            y: 6.80853573008,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: 0.800972518881,
+            w: 0.598701114078
+          }
+        }
       },
+      // 直布罗陀门口
       {
-        x: 270,
-        y: 350
+        mapX: 270,
+        mapY: 350,
+        target: {
+          title: '直布罗陀门口',
+          position: {
+            x: 0.0352291667654,
+            y: 13.577417616,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: -0.416755243577,
+            w: 0.909018738504
+          }
+        }
+      },
+      // Home
+      {
+        mapX: 0,
+        mapY: 0,
+        target: {
+          title: 'Home',
+          position: {
+            x: 0.0884503321905,
+            y: 0.028505974591,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: 0.00310461688896,
+            w: 0.999995180665
+          }
+        }
       }
     ]
   },

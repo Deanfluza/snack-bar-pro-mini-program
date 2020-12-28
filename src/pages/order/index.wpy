@@ -49,7 +49,8 @@
         console.log(this)
       },
       async submitOrder() {
-        await goTarget({position: {x: 2.43486119341, y: 1.216540979, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.747691761442, w: 0.664045954638}})
+        console.log(this.$app.$options.globalData.order.address)
+        await goTarget(this.$app.$options.globalData.order.address)
         this.$navigate('newOrderPage')
       }
     },
