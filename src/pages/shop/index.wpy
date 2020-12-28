@@ -115,14 +115,17 @@
         }
       },
       totalPrice: function() {
+        let total = 0
         if (this.shopItemList && this.shopItemList.find((item) => item.num > 0)) {
-          return this.shopItemList
+          total = this.shopItemList
             .filter((item) => item.num > 0)
             .map((item) => item.num * item.price)
             .reduce((prev, curr) => (prev + curr)) * 100
         } else {
-          return 0
+          total = 0
         }
+        this.$app.$options.globalData.order.totalPrice = total
+        return total
       }
     },
     onLoad() {

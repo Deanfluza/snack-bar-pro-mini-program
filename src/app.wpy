@@ -21,6 +21,7 @@
       userInfo: null,
       order: {
         address: {x: 0, y: 0, title: ''},
+        totalPrice: 0,
         products: []
       },
       homePose: {
