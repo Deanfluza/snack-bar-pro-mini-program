@@ -26,15 +26,16 @@
 
 </style>
 <template>
-  <address-selector :title="order.address.title"></address-selector>
-  <my-card :options="order.products"></my-card>
-  <my-tabbar></my-tabbar>
-  <van-toast id="van-toast" />
-  <van-submit-bar
-    :price="order.totalPrice"
-    button-text="提交订单"
-    bind:submit="submitOrder"
-  />
+  <view>
+    <address-selector :title="order.address.title"></address-selector>
+    <my-card :options="order.products"></my-card>
+    <van-toast id="van-toast" />
+    <van-submit-bar
+      :price="order.totalPrice"
+      button-text="提交订单"
+      bind:submit="submitOrder"
+    />
+  </view>
 </template>
 
 <script>
@@ -64,7 +65,6 @@
 <config>
   {
     "usingComponents": {
-      "my-tabbar": "../../components/my-tabbar/index",
       "address-selector": "../../components/address-selector/index",
       "submit-bar": "../../components/submit-bar/index",
       "my-card": "../../components/my-card/index",
