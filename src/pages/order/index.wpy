@@ -26,16 +26,18 @@
 
 </style>
 <template>
-  <address-selector :title="order.address.title"></address-selector>
-  <my-card :options="order.products"></my-card>
-  <my-tabbar></my-tabbar>
-  <van-dialog id="van-dialog" />
-  <van-toast id="van-toast" />
-  <van-submit-bar
-    :price="order.totalPrice"
-    button-text="提交订单"
-    bind:submit="submitOrder"
-  />
+  <view>
+    <address-selector :title="order.address.title"></address-selector>
+    <my-card :options="order.products"></my-card>
+    <my-tabbar></my-tabbar>
+    <van-dialog id="van-dialog" />
+    <van-toast id="van-toast" />
+    <van-submit-bar
+      :price="order.totalPrice"
+      button-text="提交订单"
+      bind:submit="submitOrder"
+    />
+  </view>
 </template>
 
 <script>
@@ -61,7 +63,8 @@
           return
         }
         await goTarget(this.$app.$options.globalData.order.address)
-        this.$navigate('../orderHistory/index')
+        this.$app.$options.globalData.currentTabIndex = 1
+        wx.switchTab({ url: '../orderHistory/index' })
       }
     },
     computed: {
@@ -75,7 +78,6 @@
 <config>
   {
     "usingComponents": {
-      "my-tabbar": "../../components/my-tabbar/index",
       "address-selector": "../../components/address-selector/index",
       "submit-bar": "../../components/submit-bar/index",
       "my-card": "../../components/my-card/index",

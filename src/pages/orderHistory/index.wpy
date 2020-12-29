@@ -1,29 +1,31 @@
 <template>
-  <repeat wx:for="{{orderListModel}}" wx:key="orderNumber" wx:for-index="orderNumber" wx:for-item="order">
-    <van-cell icon="null" label="{{ order.createDateTime }}"
-              is-link
-              bind:click="showOrderDetail"
-              data-orderNumber ="{{order.orderNumber}}"
-    >
+  <view class="page_tab_h">
+    <repeat wx:for="{{orderListModel}}" wx:key="orderNumber" wx:for-index="orderNumber" wx:for-item="order">
+      <van-cell icon="null" label="{{ order.createDateTime }}"
+                is-link
+                bind:click="showOrderDetail"
+                data-orderNumber ="{{order.orderNumber}}"
+      >
 
-      <view slot="title">
-        <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
-        <van-tag v-bind:type="order.stautsTag.type">{{ order.stautsTag.text }}</van-tag>
-      </view>
-    </van-cell>
-  </repeat>
+        <view slot="title">
+          <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
+          <van-tag v-bind:type="order.stautsTag.type">{{ order.stautsTag.text }}</van-tag>
+        </view>
+      </van-cell>
+    </repeat>
 
-  <van-dialog
-    title="order: {{ selectedOrderNumber }}"
-    show="{{ isShowOrderDetailDialog }}"
-    message="{{ orderDetailString }}"
-    show-cancel-button
-    bind:close="closeOrderDetail"
-    bind:confirm="completeOrder"
-    showConfirmButton="{{ isShowDialogConfirmButton }}"
-  />
-  <order-comment :show="showPop" @close="onClose"></order-comment>
-  <van-toast id="van-toast" />
+    <van-dialog
+      title="order: {{ selectedOrderNumber }}"
+      show="{{ isShowOrderDetailDialog }}"
+      message="{{ orderDetailString }}"
+      show-cancel-button
+      bind:close="closeOrderDetail"
+      bind:confirm="completeOrder"
+      showConfirmButton="{{ isShowDialogConfirmButton }}"
+    />
+    <order-comment :show="showPop" @close="onClose"></order-comment>
+    <van-toast id="van-toast" />
+  </view>
 </template>
 
 <script>
@@ -178,6 +180,11 @@ wepy.page({
           console.log(error)
         })
     }, 1000)
+  },
+  onShow() {
+    getCurrentPages()[0].getTabBar().setData({
+      active: this.$app.$options.globalData.currentTabIndex
+    })
   }
 })
 </script>
