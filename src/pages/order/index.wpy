@@ -40,6 +40,8 @@
 <script>
   import wepy from '@wepy/core'
   import { goTarget } from '../../api/car'
+  import { createOrder } from '../../api/order'
+
   wepy.page({
     data: {
       status: 'start'
@@ -49,6 +51,7 @@
         console.log(this)
       },
       async submitOrder() {
+        createOrder(this.order)
         await goTarget(this.$app.$options.globalData.order.address)
         this.$navigate('../orderHistory/index')
       }
