@@ -182,7 +182,7 @@ wepy.page({
     }, 1000)
   },
   onShow() {
-    getCurrentPages()[0].getTabBar().setData({
+    getCurrentPages().pop().getTabBar().setData({
       active: this.$app.$options.globalData.currentTabIndex
     })
   }
