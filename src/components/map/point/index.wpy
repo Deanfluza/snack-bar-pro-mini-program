@@ -3,7 +3,7 @@
   <van-dialog
     title="确认"
     show="{{ show }}"
-    message="确认要送至坐标{{x}},{{y}}吗"
+    message="确认要送至坐标{{target.title}}吗"
     show-cancel-button
     bind:close="show = false"
     bind:confirm="confirm"
@@ -26,21 +26,18 @@
       target: {
         type: Object,
         default: () => ({
-          mapX: 0,
-          mapY: 0,
-          target: {
-            position: {
-              x: 0.0,
-              y: 0.0,
-              z: 0.0
-            },
-            orientation: {
-              x: 0.0,
-              y: 0.0,
-              z: 0.0,
-              w: 0.0
-            }
-          }
+          position: {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+            w: 0.0
+          },
+          title: ''
         })
       }
     },
