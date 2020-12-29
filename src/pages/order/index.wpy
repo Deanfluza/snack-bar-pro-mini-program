@@ -42,6 +42,7 @@
   import wepy from '@wepy/core'
   import { goTarget } from '../../api/car'
   import { createOrder } from '../../api/order'
+  import eventHub from '../../common/eventHub'
 
   wepy.page({
     data: {
@@ -55,6 +56,7 @@
         createOrder(this.order)
           .then(() => {
             goTarget(this.$app.$options.globalData.order.address)
+            eventHub.$emit('clearCart')
             this.$app.$options.globalData.currentTabIndex = 1
             wx.switchTab({ url: '../orderHistory/index' })
           })
