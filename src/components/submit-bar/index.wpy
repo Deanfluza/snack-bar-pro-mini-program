@@ -15,12 +15,6 @@ wepy.component({
     point: Object
   },
   data: {
-  },
-  methods: {
-    submit() {
-      console.log(this.point)
-      // goTarget(this.point);
-    }
   }
 })
 </script>

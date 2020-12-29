@@ -9,7 +9,6 @@
 
 <script>
 import wepy from '@wepy/core'
-import store from '../../mixins/store'
 
 wepy.component({
   data: {
@@ -20,8 +19,7 @@ wepy.component({
       type: String,
       default: 'Please select address'
     }
-  },
-  mixins: [store]
+  }
 })
 </script>
 

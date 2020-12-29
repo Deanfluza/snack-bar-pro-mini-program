@@ -4,11 +4,11 @@ const perfix = '/api'
 
 exports.goTarget = (target) => {
   const url = `${perfix}/setTargetPose`
-  const data = { targetPose: { position: { ...target, z: 1 }, orientation: { x: 1, y: 2, z: 1 } } }
+  const data = { targetPose: target }
   return axios.post(url, data)
 }
-exports.backHome = () => {
-  const url = `${perfix}/setTargetPose`
-  const data = { targetPose: this.$wx.globalData.homePose }
-  return axios.post(url, data)
+
+exports.getCarReachStatus = () => {
+  const url = `${perfix}/move_base/result`
+  return axios.get(url)
 }

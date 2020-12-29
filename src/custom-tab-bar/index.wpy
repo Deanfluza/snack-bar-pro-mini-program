@@ -1,0 +1,51 @@
+<template>
+  <van-tabbar active="{{ active }}" @change="onChange" active-color="{{ selectedColor }}">
+    <van-tabbar-item
+      wx:for="{{list}}"
+      wx:key="index"
+      icon="{{item.icon}}"
+      data-path="{{item.pagePath}}"
+    >{{item.text}}</van-tabbar-item>
+  </van-tabbar>
+</template>
+
+<script>
+import wepy from '@wepy/core';
+
+wepy.component({
+  data: {
+    active: 0,
+    selectedColor: '#ff7e67',
+    list: [
+      {
+        pagePath: '/pages/shop/index',
+        text: '商品',
+        icon: 'bag-o'
+      },
+      {
+        pagePath: '/pages/orderHistory/index',
+        text: '订单',
+        icon: 'orders-o'
+      }
+    ]
+  },
+  methods: {
+    onChange: function(event) {
+      this.$app.$options.globalData.currentTabIndex = event.$wx.detail
+      wx.switchTab({url: this.list[event.$wx.detail].pagePath})
+    }
+  }
+});
+</script>
+
+<style scoped>
+</style>
+
+<config>
+  {
+    "usingComponents": {
+      "van-tabbar": "../components/vant/tabbar/index",
+      "van-tabbar-item": "../components/vant/tabbar-item/index"
+    }
+  }
+</config>

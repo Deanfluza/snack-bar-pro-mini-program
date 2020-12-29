@@ -26,16 +26,21 @@
 
 </style>
 <template>
-  <address-selector :title="order.address.title"></address-selector>
-  <my-card :options="order.products"></my-card>
-  <my-tabbar></my-tabbar>
-  <van-toast id="van-toast" />
-  <submit-bar :point="order.address"></submit-bar>
+  <view>
+    <address-selector :title="order.address.title"></address-selector>
+    <my-card :options="order.products"></my-card>
+    <van-toast id="van-toast" />
+    <van-submit-bar
+      :price="order.totalPrice"
+      button-text="提交订单"
+      bind:submit="submitOrder"
+    />
+  </view>
 </template>
 
 <script>
   import wepy from '@wepy/core'
-  
+  import { goTarget } from '../../api/car'
   wepy.page({
     data: {
       status: 'start'
@@ -43,6 +48,10 @@
     methods: {
       shop: () => {
         console.log(this)
+      },
+      async submitOrder() {
+        await goTarget(this.$app.$options.globalData.order.address)
+        this.$navigate('../orderHistory/index')
       }
     },
     computed: {
@@ -56,12 +65,11 @@
 <config>
   {
     "usingComponents": {
-      "my-tabbar": "../../components/my-tabbar/index",
       "address-selector": "../../components/address-selector/index",
       "submit-bar": "../../components/submit-bar/index",
       "my-card": "../../components/my-card/index",
-      "map": "../../components/map/base/index",
-      "van-toast": "../../components/vant/toast/index"
+      "van-toast": "../../components/vant/toast/index",
+      "van-submit-bar": "../../components/vant/submit-bar"
     }
   }
 </config>

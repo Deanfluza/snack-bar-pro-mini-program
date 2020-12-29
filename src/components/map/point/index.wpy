@@ -22,6 +22,26 @@
       y: {
         type: Number,
         default: 0
+      },
+      target: {
+        type: Object,
+        default: () => ({
+          mapX: 0,
+          mapY: 0,
+          target: {
+            position: {
+              x: 0.0,
+              y: 0.0,
+              z: 0.0
+            },
+            orientation: {
+              x: 0.0,
+              y: 0.0,
+              z: 0.0,
+              w: 0.0
+            }
+          }
+        })
       }
     },
     data: {
@@ -29,10 +49,8 @@
     },
     methods: {
       confirm() {
-        const target = {x: this.x, y: this.y, title: this.x + this.y + 'test'}
-        // this.goTargetTest(this.x, this.y)
-        // this.$navigate('../../pages/order/index')
-        this.$emit('change', target)
+        this.$app.$options.globalData.order.address = this.target
+        this.$emit('change')
       }
     }
   })

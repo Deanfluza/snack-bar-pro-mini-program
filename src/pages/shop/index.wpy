@@ -1,34 +1,48 @@
 <template>
-  <view style='margin-bottom: 110rpx;'>
-    <repeat wx:for="{{shopItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
-      <van-card
-        price="{{ shopItem.price }}"
-        desc="{{ shopItem.desc }}"
-        title="{{ shopItem.title }}"
-        thumb="{{ shopItem.thumb }}"
-        num="{{ shopItem.num }}"
-      >
-        <view slot="footer">
-          <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
-          <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
-        </view>
-      </van-card>
-    </repeat>
-  </view>
+  <view class="page_tab_h">
+    <view>
+      <repeat wx:for="{{shopItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
+        <van-card
+          price="{{ shopItem.price }}"
+          desc="{{ shopItem.desc }}"
+          title="{{ shopItem.title }}"
+          thumb="{{ shopItem.thumb }}"
+          num="{{ shopItem.num }}"
+        >
+          <view slot="footer">
+            <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
+            <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
+          </view>
+        </van-card>
+      </repeat>
+    </view>
+    <view>
+      <van-submit-bar
+        price="{{ totalPrice }}"
+        button-text="查看购物车"
+        bind:submit="listSelectedItem"
+        disabled="{{ disableSubmit }}"
+      />
+    </view>
+    <van-action-sheet show="{{ isShopCarShow }}" title='已选商品' bind:close="submitBarClose">
+      <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
+        <van-card
+          price="{{ shopItem.price }}"
+          desc="{{ shopItem.desc }}"
+          title="{{ shopItem.title }}"
+          thumb="{{ shopItem.thumb }}"
+          num="{{ shopItem.num }}"
+        >
+          <view slot="footer">
+            <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
+            <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
+          </view>
+        </van-card>
+      </repeat>
+      <van-button disabled="{{disableSubmit}}" type="danger" @click="navigateToOrder"
+                  style='float: right; margin-right: 25px; margin-bottom: 2px; margin-top: 2px'>提交</van-button>
+    </van-action-sheet>
   <view>
-    <van-submit-bar
-      price="{{ totalPrice }}"
-      button-text="Shop Car"
-      bind:submit="listSelectedItem"
-    />
-  </view>
-  <van-action-sheet show="{{ isShopCarShow }}" title='Shop Car' bind:close="submitBarClose">
-    <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="selectedItem" style='margin-bottom: 50rpx'>
-      <view style='margin-bottom: 10rpx'>{{selectedItem.title}} * {{selectedItem.num}}</view>
-    </repeat>
-    <van-button type="danger" @click="navigateToOrder">Submit</van-button>
-  </van-action-sheet>
-
 </template>
 
 <script>
@@ -52,8 +66,10 @@
         }
       },
       navigateToOrder() {
-        this.$app.$options.globalData.order.products = this.selectedItemList
-        this.$navigate('../order/index')
+        if (this.selectedItemList.length > 0) {
+          this.$app.$options.globalData.order.products = this.selectedItemList
+          this.$navigate('../order/index')
+        }
       },
       getShopItemList: function() {
         return [
@@ -115,18 +131,29 @@
         }
       },
       totalPrice: function() {
+        let total = 0
         if (this.shopItemList && this.shopItemList.find((item) => item.num > 0)) {
-          return this.shopItemList
+          total = this.shopItemList
             .filter((item) => item.num > 0)
             .map((item) => item.num * item.price)
             .reduce((prev, curr) => (prev + curr)) * 100
         } else {
-          return 0
+          total = 0
         }
+        this.$app.$options.globalData.order.totalPrice = total
+        return total
+      },
+      disableSubmit: function() {
+        return this.shopItemList && this.shopItemList.every((item) => item.num <= 0)
       }
     },
     onLoad() {
       this.shopItemList = this.getShopItemList()
+    },
+    onShow() {
+      getCurrentPages()[0].getTabBar().setData({
+        active: this.$app.$options.globalData.currentTabIndex
+      })
     }
   })
 </script>
@@ -143,6 +170,14 @@
 </config>
 
 <style>
+.van-submit-bar {
+  bottom: 50px !important;
+}
+
+.van-popup {
+  bottom: 50px !important;
+}
+
 @keyframes circle-draw{
   80% {
     stroke-dashoffset: 0;
