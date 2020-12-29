@@ -51,7 +51,8 @@
       },
       async submitOrder() {
         await goTarget(this.$app.$options.globalData.order.address)
-        this.$navigate('../orderHistory/index')
+        this.$app.$options.globalData.currentTabIndex = 1
+        wx.switchTab({ url: '../orderHistory/index' })
       }
     },
     computed: {
