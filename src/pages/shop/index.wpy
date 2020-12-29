@@ -68,6 +68,7 @@
       navigateToOrder() {
         if (this.selectedItemList.length > 0) {
           this.$app.$options.globalData.order.products = this.selectedItemList
+          this.submitBarClose()
           this.$navigate('../order/index')
         }
       },
@@ -120,6 +121,11 @@
       },
       submitBarClose: function() {
         this.isShopCarShow = false
+      },
+      cleanCart: function() {
+        this.shopItemList && this.shopItemList.forEach(item => item.num = 0)
+        this.$app.$options.globalData.order.totalPrice = 0
+        this.$app.$options.globalData.order.products = []
       }
     },
     computed: {
