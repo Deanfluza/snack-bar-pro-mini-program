@@ -7,6 +7,9 @@
     justify-content: space-between;
     box-sizing: border-box;
   }
+  .page_tab_h {
+    padding-bottom: 100px;
+  }
 </style>
 
 <script>
@@ -18,6 +21,7 @@
 
   wepy.app({
     globalData: {
+      currentTabIndex: 0,
       userInfo: null,
       order: {
         address: {x: 0, y: 0, title: ''},
@@ -25,8 +29,17 @@
         products: []
       },
       homePose: {
-        position: { x: 0, y: 0, z: 0 },
-        orientation: { x: 0, y: 0, z: 0, w: 0 }
+        position: {
+          x: 0.0884503321905,
+          y: 0.028505974591,
+          z: 0.0
+        },
+        orientation: {
+          x: 0.0,
+          y: 0.0,
+          z: 0.00310461688896,
+          w: 0.999995180665
+        }
       }
     }
   })
@@ -40,6 +53,18 @@
       "pages/orderHistory/index",
       "pages/address/index"
     ],
+    "tabBar": {
+      "custom": true,
+      "list": [{
+          "pagePath": "pages/shop/index",
+          "text": "商品"
+        },
+        {
+          "pagePath": "pages/orderHistory/index",
+          "text": "订单"
+        }
+      ]
+    },
     "window": {
       "backgroundTextStyle": "light",
       "navigationBarBackgroundColor": "#fff",

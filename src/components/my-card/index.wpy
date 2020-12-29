@@ -4,7 +4,7 @@
     wx:key="index"
     num="{{ item.num }}"
     price="{{ item.price }}"
-    desc="null"
+    desc="{{ item.desc }}"
     title="{{ item.title }}"
     thumb="{{ item.thumb }}"
   />
