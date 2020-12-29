@@ -47,6 +47,7 @@
 
 <script>
   import wepy from '@wepy/core'
+  import eventHub from '../../common/eventHub'
   
   wepy.page({
     data: {
@@ -121,11 +122,6 @@
       },
       submitBarClose: function() {
         this.isShopCarShow = false
-      },
-      cleanCart: function() {
-        this.shopItemList && this.shopItemList.forEach(item => item.num = 0)
-        this.$app.$options.globalData.order.totalPrice = 0
-        this.$app.$options.globalData.order.products = []
       }
     },
     computed: {
@@ -155,9 +151,14 @@
     },
     onLoad() {
       this.shopItemList = this.getShopItemList()
+      eventHub.$on('clearCart', () => {
+        this.shopItemList && this.shopItemList.forEach(item => item.num = 0)
+        this.$app.$options.globalData.order.totalPrice = 0
+        this.$app.$options.globalData.order.products = []
+      })
     },
     onShow() {
-      getCurrentPages()[0].getTabBar().setData({
+      getCurrentPages().pop().getTabBar().setData({
         active: this.$app.$options.globalData.currentTabIndex
       })
     }
