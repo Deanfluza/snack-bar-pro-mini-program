@@ -51,11 +51,16 @@
       shop: () => {
         console.log(this)
       },
-      async submitOrder() {
+      submitOrder() {
         createOrder(this.order)
-        await goTarget(this.$app.$options.globalData.order.address)
-        this.$app.$options.globalData.currentTabIndex = 1
-        wx.switchTab({ url: '../orderHistory/index' })
+          .then(() => {
+            goTarget(this.$app.$options.globalData.order.address)
+            this.$app.$options.globalData.currentTabIndex = 1
+            wx.switchTab({ url: '../orderHistory/index' })
+          })
+        .catch((e) => {
+          console.log(e)
+        })
       }
     },
     computed: {
