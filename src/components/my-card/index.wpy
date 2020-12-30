@@ -6,16 +6,18 @@
     price="{{ item.price }}"
     desc="{{ item.desc }}"
     title="{{ item.title }}"
-    thumb="{{ item.thumb }}"
+    thumb="{{baseUrl}}{{ item.thumb }}"
   />
 </template>
 
 <script>
   import wepy from '@wepy/core'
+  import { baseUrl } from '../../common/constant.js'
 
   wepy.component({
     data: {
-      active: 1
+      active: 1,
+      baseUrl
     },
     props: {
       options: Array
