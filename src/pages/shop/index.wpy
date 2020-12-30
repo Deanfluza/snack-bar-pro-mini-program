@@ -64,6 +64,7 @@
 <script>
   import wepy from '@wepy/core'
   import eventHub from '../../common/eventHub'
+  import { baseUrl } from '../../common/constant.js'
 
   wepy.page({
     data: {
