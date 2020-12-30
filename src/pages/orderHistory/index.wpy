@@ -31,6 +31,8 @@
 <script>
 import wepy from '@wepy/core'
 import { goTarget, getCarReachStatus } from '../../api/car'
+import { getAllOrders, updateOrder } from '../../api/order'
+import _ from 'lodash'
 
 wepy.page({
   data: {
@@ -43,7 +45,8 @@ wepy.page({
   },
   computed: {
     orderDetailString: function() {
-      const shopItemList = this.getOrderDetail(this.selectedOrderNumber)
+      const order = this.orderList.find(n => n.orderNumber === this.selectedOrderNumber)
+      const shopItemList = order ? order.products : []
       if (shopItemList && shopItemList.length > 0) {
         return shopItemList.reduce((accumulator, item) => accumulator + `${item.title} x ${item.count}\n`, '')
       } else {
@@ -97,94 +100,76 @@ wepy.page({
       this.autoCompleteOrder()
     },
     autoCompleteOrder: function() {
-      this.orderList.find(order => order.orderNumber === this.currentOrderNumber).orderStatus = 'completed'
-      this.isShowOrderDetailDialog = false
-      this.isShowDialogConfirmButton = false
-      goTarget(this.$app.$options.globalData.homePose)
+      let currentOrder = this.orderList.find(order => order.orderNumber === this.currentOrderNumber)
+      const cloneOrder = _.cloneDeep(currentOrder)
+      cloneOrder.orderStatus = 'completed'
+      cloneOrder.completeDateTime = new Date().getTime()
+      updateOrder(cloneOrder).then((res) => {
+        _.assign(currentOrder, res.data)
+        this.isShowOrderDetailDialog = false
+        this.isShowDialogConfirmButton = false
+        goTarget(this.$app.$options.globalData.homePose)
+      })
     },
     reachedEvent: function() {
       clearInterval(this.intervalId)
       let currentOrder = this.orderList.find((order) => order.orderNumber === this.currentOrderNumber)
       currentOrder.orderStatus = 'reached'
-      this.isShowDialogConfirmButton = true
-      setTimeout(() => {
-        if (currentOrder.orderStatus === 'reached') {
-          this.autoCompleteOrder()
-        }
-      }, 60000)
+      updateOrder(currentOrder).then((res) => {
+        currentOrder = {...res.data}
+        this.isShowDialogConfirmButton = true
+        setTimeout(() => {
+          let currentOrder = this.orderList.find((order) => order.orderNumber === this.currentOrderNumber)
+          if (currentOrder.orderStatus === 'reached') {
+            this.autoCompleteOrder()
+          }
+        }, 60000)
+      })
     },
     closeOrderDetail: function() {
       this.isShowOrderDetailDialog = false
     },
-    getOrderHistory: function() {
-      return [
-        {
-          orderNumber: '1',
-          orderStatus: 'processing',
-          createDateTime: '2020-12-27T18:24:00',
-          completeDateTime: ''
-        },
-        {
-          orderNumber: '2',
-          orderStatus: 'completed',
-          createDateTime: '2020-12-25T16:24:00',
-          completeDateTime: '2020-12-25T16:34:00'
-        }
-      ]
-    },
-    getOrderDetail: function(orderNumber) {
-      const orderList = {
-        '1': [
-          {
-            price: 3.50,
-            title: '雪碧',
-            desc: '有糖的',
-            thumb: '/static/image/shopItemImage/sprite.jpg',
-            count: 1
-          },
-          {
-            price: 3.50,
-            title: '可口可乐',
-            desc: '有糖的',
-            thumb: '/static/image/shopItemImage/coco.jpg',
-            count: 1
+    getOrderHistory() {
+      return getAllOrders().then((res) => {
+        this.orderList = res.data.map(item => {
+          return {
+            orderNumber: item._id,
+            orderStatus: item.orderStatus,
+            createDateTime: item.createDateTime,
+            completeDateTime: item.completeDateTime,
+            products: item.products,
+            address: item.address
           }
-        ],
-        '2': [
-          {
-            price: 3.50,
-            title: '雪碧',
-            desc: '有糖的',
-            thumb: '/static/image/shopItemImage/sprite.jpg',
-            count: 2
-          }
-        ]
-      }
-      return orderList[orderNumber]
+        })
+      }).catch((e) => {
+        console.log(e)
+      })
     },
     onClose: function() {
       this.showPop = false
     }
   },
-  onLoad() {
-    this.orderList = this.getOrderHistory()
-    this.intervalId = setInterval(() => {
-      getCarReachStatus()
-        .then((res) => {
-          const isReached = res.data.reached
-          if (isReached) {
-            this.reachedEvent()
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    }, 1000)
-  },
   onShow() {
+    this.getOrderHistory().then(() => {
+      this.intervalId = setInterval(() => {
+        getCarReachStatus()
+          .then((res) => {
+            const isReached = res.data.reached
+            if (isReached) {
+              this.reachedEvent()
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }, 1000)
+    })
     getCurrentPages().pop().getTabBar().setData({
       active: this.$app.$options.globalData.currentTabIndex
     })
+  },
+  onHide() {
+    clearInterval(this.intervalId)
   }
 })
 </script>

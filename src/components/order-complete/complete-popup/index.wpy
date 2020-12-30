@@ -1,5 +1,5 @@
 <template>
-  <van-popup show="{{show}}" bind:close="onClose" position="bottom" custom-style="height: 30%;"  closeable close-icon-position="top-right" round>
+  <van-popup show="{{show}}" bind:close="onClose" position="bottom" custom-style="height: 38%;"  closeable close-icon-position="top-right" round>
     <view class="container">
       <van-row class="titleRowCls"><van-icon name="orders-o" size="x-large" color="red"/><span style="font-size: x-large">确认完成</span></van-row>
 

@@ -1,15 +1,17 @@
 <template>
   <scroll-view :scroll-x="true" :style="{width: '100%', height: scrollHeight + 'px'}">
     <point @change="goBack" v-for="position in positionArr" :x="position.mapX * xPositionPercentage" :y="position.mapY * yPositionPercentage" :target="position.target"/>
-    <image mode="heightFix" src="/static/image/17F.png" :style="{height: scrollHeight + 'px'}" id="map"/>
+    <image mode="heightFix" src="{{baseUrl}}/static/image/17F.png" :style="{height: scrollHeight + 'px'}" id="map"/>
   </scroll-view>
 </template>
 
 <script>
 import wepy from '@wepy/core'
+import { baseUrl } from '../../common/constant'
 
 wepy.page({
   data: {
+    baseUrl,
     scrollWidth: 0,
     scrollHeight: 0,
     xPositionPercentage: 1,
@@ -36,8 +38,8 @@ wepy.page({
       },
       // 直布罗陀门口
       {
-        mapX: 290,
-        mapY: 220,
+        mapX: 288,
+        mapY: 230,
         target: {
           title: '直布罗陀门口',
           position: {
@@ -69,6 +71,24 @@ wepy.page({
             y: 0.0,
             z: 0.00310461688896,
             w: 0.999995180665
+          }
+        }
+      },
+      {
+        mapX: 340,
+        mapY: 433,
+        target: {
+          title: '校长室门口沙发中间',
+          position: {
+            x: 2.43486119341,
+            y: 1.216540979,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: 0.747691761442,
+            w: 0.664045954638
           }
         }
       }

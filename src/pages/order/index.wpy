@@ -29,8 +29,6 @@
   <view>
     <address-selector :title="order.address.title"></address-selector>
     <my-card :options="order.products"></my-card>
-    <my-tabbar></my-tabbar>
-    <van-dialog id="van-dialog" />
     <van-toast id="van-toast" />
     <van-submit-bar
       :price="order.totalPrice"
@@ -43,9 +41,9 @@
 <script>
   import wepy from '@wepy/core'
   import { goTarget } from '../../api/car'
-  import _ from 'lodash'
-  import Dialog from '../../components/vant/dialog/dialog'
-  
+  import { createOrder } from '../../api/order'
+  import eventHub from '../../common/eventHub'
+
   wepy.page({
     data: {
       status: 'start'
@@ -54,17 +52,17 @@
       shop: () => {
         console.log(this)
       },
-      async submitOrder() {
-        if (_.isEmpty(this.order.address.title)) {
-          Dialog.alert({
-            title: 'Warning',
-            message: 'Please select address'
+      submitOrder() {
+        createOrder(this.order)
+          .then(() => {
+            goTarget(this.$app.$options.globalData.order.address)
+            eventHub.$emit('clearCart')
+            this.$app.$options.globalData.currentTabIndex = 1
+            wx.switchTab({ url: '../orderHistory/index' })
           })
-          return
-        }
-        await goTarget(this.$app.$options.globalData.order.address)
-        this.$app.$options.globalData.currentTabIndex = 1
-        wx.switchTab({ url: '../orderHistory/index' })
+        .catch((e) => {
+          console.log(e)
+        })
       }
     },
     computed: {
@@ -82,8 +80,7 @@
       "submit-bar": "../../components/submit-bar/index",
       "my-card": "../../components/my-card/index",
       "van-toast": "../../components/vant/toast/index",
-      "van-submit-bar": "../../components/vant/submit-bar",
-      "van-dialog": "../../components/vant/dialog/index"
+      "van-submit-bar": "../../components/vant/submit-bar"
     }
   }
 </config>
