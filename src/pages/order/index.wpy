@@ -41,6 +41,7 @@
 <script>
   import wepy from '@wepy/core'
   import { goTarget } from '../../api/car'
+  import { createOrder } from '../../api/order'
   import eventHub from '../../common/eventHub'
 
   wepy.page({
@@ -51,11 +52,17 @@
       shop: () => {
         console.log(this)
       },
-      async submitOrder() {
-        await goTarget(this.$app.$options.globalData.order.address)
-        this.$app.$options.globalData.currentTabIndex = 1
-        eventHub.$emit('clearCart')
-        wx.switchTab({ url: '../orderHistory/index' })
+      submitOrder() {
+        createOrder(this.order)
+          .then(() => {
+            goTarget(this.$app.$options.globalData.order.address)
+            eventHub.$emit('clearCart')
+            this.$app.$options.globalData.currentTabIndex = 1
+            wx.switchTab({ url: '../orderHistory/index' })
+          })
+        .catch((e) => {
+          console.log(e)
+        })
       }
     },
     computed: {
