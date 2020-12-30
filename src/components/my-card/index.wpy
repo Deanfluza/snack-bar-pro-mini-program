@@ -2,7 +2,7 @@
   <van-card
     wx:for="{{ options }}"
     wx:key="index"
-    num="{{ item.num }}"
+    num="{{ item.count }}"
     price="{{ item.price }}"
     desc="{{ item.desc }}"
     title="{{ item.title }}"

@@ -1,5 +1,5 @@
 <template>
-  <image src="/static/image/endPoint.png" :style="{position: 'absolute', width: '32px', height: '32px', marginLeft: x + 'px', marginTop: y + 'px'}" @click="show = true"></image>
+  <image src="{{baseUrl}}/static/image/endPoint.png" :style="{position: 'absolute', width: '32px', height: '32px', marginLeft: x + 'px', marginTop: y + 'px'}" @click="show = true"></image>
   <van-dialog
     title="确认"
     show="{{ show }}"
@@ -12,6 +12,7 @@
 
 <script>
   import wepy from '@wepy/core'
+  import { baseUrl } from '../../../common/constant'
 
   wepy.component({
     props: {
@@ -45,6 +46,7 @@
       }
     },
     data: {
+      baseUrl,
       show: false
     },
     methods: {
