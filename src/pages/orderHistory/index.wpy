@@ -32,6 +32,7 @@
 import wepy from '@wepy/core'
 import { goTarget, getCarReachStatus } from '../../api/car'
 import { getAllOrders, updateOrder } from '../../api/order'
+import _ from 'lodash'
 
 wepy.page({
   data: {
@@ -100,9 +101,11 @@ wepy.page({
     },
     autoCompleteOrder: function() {
       let currentOrder = this.orderList.find(order => order.orderNumber === this.currentOrderNumber)
-      currentOrder.orderStatus = 'completed'
-      updateOrder(currentOrder).then((res) => {
-        currentOrder = {...res.data}
+      const cloneOrder = _.cloneDeep(currentOrder)
+      cloneOrder.orderStatus = 'completed'
+      cloneOrder.completeDateTime = new Date().getTime()
+      updateOrder(cloneOrder).then((res) => {
+        _.assign(currentOrder, res.data)
         this.isShowOrderDetailDialog = false
         this.isShowDialogConfirmButton = false
         goTarget(this.$app.$options.globalData.homePose)
@@ -120,7 +123,7 @@ wepy.page({
           if (currentOrder.orderStatus === 'reached') {
             this.autoCompleteOrder()
           }
-        }, 10000)
+        }, 60000)
       })
     },
     closeOrderDetail: function() {
