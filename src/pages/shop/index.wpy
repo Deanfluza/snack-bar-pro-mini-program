@@ -1,194 +1,362 @@
 <template>
-  <view class="page_tab_h">
+  <div class="page_tab_h" style="display: flex;overflow: hidden;">
+    <div>
+      <van-sidebar active-key="{{ activeKey }}" bind:change="onChange">
+        <van-sidebar-item v-for="sideBarItem in sideBarList" :title="sideBarItem.title" :badge="sideBarItem.badge"/>
+      </van-sidebar>
+    </div>
+    <scroll-view scroll-y style="height: {{itemBoxHeight}}px" scroll-into-view="{{toView}}" bindscroll="scrollTo">
+      <div v-for="sideBarItem in sideBarList">
+        <div :id="sideBarItem.type">
+          <div style="position: sticky; top: 0;width: 100%;border: 1px solid gainsboro">
+            {{sideBarItem.title}}
+          </div>
+          <div>
+            <repeat wx:for="{{sideBarItem.items}}" wx:key="id" wx:for-index="index" wx:for-item="shopItem">
+              <van-card
+                price="{{ shopItem.price }}"
+                title="{{ shopItem.title }}"
+                thumb="{{ shopItem.thumb }}"
+                num="{{ shopItem.count }}"
+              >
+                <view slot="footer">
+                  <van-button size="mini" round icon="plus" data-index="{{shopItem.id}}" bind:click="plus"></van-button>
+                  <van-button size="mini" round icon="minus" data-index="{{shopItem.id}}"
+                              bind:click="minus"></van-button>
+                </view>
+              </van-card>
+            </repeat>
+          </div>
+        </div>
+      </div>
+    </scroll-view>
     <view>
-      <repeat wx:for="{{shopItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
-        <van-card
-          price="{{ shopItem.price }}"
-          desc="{{ shopItem.desc }}"
-          title="{{ shopItem.title }}"
-          thumb="{{ shopItem.thumb }}"
-          num="{{ shopItem.num }}"
-        >
-          <view slot="footer">
-            <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
-            <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
-          </view>
-        </van-card>
-      </repeat>
+      <view>
+        <van-submit-bar
+          price="{{ totalPrice }}"
+          button-text="查看购物车"
+          bind:submit="listSelectedItem"
+          disabled="{{ disableSubmit }}"
+        />
+      </view>
+      <van-action-sheet show="{{ isShopCarShow }}" title="已选商品" bind:close="submitBarClose">
+        <repeat wx:for="{{selectedGoods}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
+          <van-card
+            price="{{ shopItem.price }}"
+            title="{{ shopItem.title }}"
+            thumb="{{ shopItem.thumb }}"
+            num="{{ shopItem.count }}"
+          >
+            <view slot="footer">
+              <van-button size="mini" round icon="plus" data-index="{{shopItem.id}}" bind:click="plus"></van-button>
+              <van-button size="mini" round icon="minus" data-index="{{shopItem.id}}" bind:click="minus"></van-button>
+            </view>
+          </van-card>
+        </repeat>
+        <van-button disabled="{{disableSubmit}}" type="danger" @click="navigateToOrder"
+                    style="float: right; margin-right: 25px; margin-bottom: 2px; margin-top: 2px">提交
+        </van-button>
+      </van-action-sheet>
     </view>
-    <view>
-      <van-submit-bar
-        price="{{ totalPrice }}"
-        button-text="查看购物车"
-        bind:submit="listSelectedItem"
-        disabled="{{ disableSubmit }}"
-      />
-    </view>
-    <van-action-sheet show="{{ isShopCarShow }}" title='已选商品' bind:close="submitBarClose">
-      <repeat wx:for="{{selectedItemList}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
-        <van-card
-          price="{{ shopItem.price }}"
-          desc="{{ shopItem.desc }}"
-          title="{{ shopItem.title }}"
-          thumb="{{ shopItem.thumb }}"
-          num="{{ shopItem.num }}"
-        >
-          <view slot="footer">
-            <van-button size="mini" round icon="plus" data-index="{{shopItem.index}}" bind:click="plus"></van-button>
-            <van-button size="mini" round icon="minus" data-index="{{shopItem.index}}" bind:click="minus"></van-button>
-          </view>
-        </van-card>
-      </repeat>
-      <van-button disabled="{{disableSubmit}}" type="danger" @click="navigateToOrder"
-                  style='float: right; margin-right: 25px; margin-bottom: 2px; margin-top: 2px'>提交</van-button>
-    </van-action-sheet>
-  <view>
+  </div>
 </template>
 
 <script>
   import wepy from '@wepy/core'
   import eventHub from '../../common/eventHub'
-  
+
   wepy.page({
     data: {
-      shopItemList: null,
-      isShopCarShow: false,
-      selectedShopItemShowInCar: []
-    },
-    methods: {
-      plus: function(e) {
-        const index = e.currentTarget.dataset.index
-        this.shopItemList.find((shopItem) => shopItem.index === index).num++
-      },
-      minus: function(e) {
-        const index = e.currentTarget.dataset.index
-        if (this.shopItemList.find((shopItem) => shopItem.index === index).num > 0) {
-          this.shopItemList.find((shopItem) => shopItem.index === index).num--
-        }
-      },
-      navigateToOrder() {
-        if (this.selectedItemList.length > 0) {
-          this.$app.$options.globalData.order.products = this.selectedItemList
-          this.submitBarClose()
-          this.$navigate('../order/index')
-        }
-      },
-      getShopItemList: function() {
-        return [
-          {
-            index: '0',
-            price: 3.50,
-            title: '雪碧',
-            desc: '有糖的',
-            thumb: '/static/image/shopItemImage/sprite.jpg',
-            num: 0
-          },
-          {
-            index: '1',
-            price: 3.50,
-            title: '可口可乐',
-            desc: '有糖的',
+      activeKey: 0,
+      itemBoxHeight: 0,
+      toView: 'drinks',
+      top0: 0,
+      top1: 0,
+      top2: 0,
+      drinkGoods: null,
+      snacksGoods: null,
+      sideBarList: [
+        {
+          title: '饮料',
+          type: 'drinks',
+          badge: '',
+          items: [{
+            id: 1,
+            price: 2.5,
+            title: '可乐',
             thumb: '/static/image/shopItemImage/coco.jpg',
-            num: 0
+            count: 0,
+            type: 'drinks'
           },
-          {
-            index: '2',
-            price: 5.00,
-            title: '卡乐比虾条',
-            desc: '好吃的',
-            thumb: '/static/image/shopItemImage/kalebi.jpeg',
-            num: 0
-          },
-          {
-            index: '3',
-            price: 3.50,
-            title: '乐事薯片青瓜味',
-            desc: '好吃的',
+            {
+              id: 2,
+              price: 2.5,
+              title: '雪碧',
+              thumb: '/static/image/shopItemImage/sprite.jpg',
+              count: 0,
+              type: 'drinks'
+            },
+            {
+              id: 3,
+              price: 2.5,
+              title: '芬达',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'drinks'
+            },
+            {
+              id: 4,
+              price: 2.5,
+              title: '果粒橙',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'drinks'
+            },
+            {
+              id: 5,
+              price: 2.5,
+              title: '维他奶',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'drinks'
+            },
+            {
+              id: 6,
+              price: 2.5,
+              title: '无糖可乐',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'drinks'
+            }]
+        },
+        {
+          title: '零食',
+          type: 'snacks',
+          badge: '',
+          items: [{
+            id: 7,
+            price: 2.5,
+            title: '乐事薯片',
             thumb: '/static/image/shopItemImage/leshi.jpg',
-            num: 0
+            count: 0,
+            type: 'snacks'
           },
-          {
-            index: '4',
-            price: 3.50,
-            title: '乐事薯片青瓜味',
-            desc: '好吃的',
-            thumb: '/static/image/shopItemImage/leshi.jpg',
-            num: 0
-          }
-        ]
-      },
-      listSelectedItem: function() {
-        this.isShopCarShow = true
-      },
-      submitBarClose: function() {
-        this.isShopCarShow = false
-      }
+            {
+              id: 8,
+              price: 2.5,
+              title: '口香糖',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'snacks'
+            },
+            {
+              id: 9,
+              price: 2.5,
+              title: '卡乐比虾条',
+              thumb: '/static/image/shopItemImage/kalebi.jpeg',
+              count: 0,
+              type: 'snacks'
+            },
+            {
+              id: 10,
+              price: 2.5,
+              title: '口香糖',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'snacks'
+            },
+            {
+              id: 11,
+              price: 2.5,
+              title: '口香糖',
+              thumb: 'https://img.yzcdn.cn/vant/ipad.jpeg',
+              count: 0,
+              type: 'snacks'
+            }]
+        },
+        {title: '生活用品', badge: '', type: 'daily'}
+      ],
+      isShopCarShow: false
     },
     computed: {
-      selectedItemList: function() {
-        if (this.shopItemList) {
-          return this.shopItemList.filter((item) => item.num > 0)
+      selectedGoods: function () {
+        let selectedItems = [];
+        if (this.sideBarList && this.sideBarList[0].items) {
+          this.sideBarList.forEach(list => {
+            let items = list.items;
+            if (!items) {
+              return true;
+            }
+            let currentItems = items.filter((item) => item.count > 0);
+            if (currentItems != false) {
+              selectedItems.push.apply(selectedItems, currentItems);
+            }
+          });
+          return selectedItems;
         } else {
-          return []
+          return [];
         }
       },
-      totalPrice: function() {
+      totalPrice: function () {
         let total = 0
-        if (this.shopItemList && this.shopItemList.find((item) => item.num > 0)) {
-          total = this.shopItemList
-            .filter((item) => item.num > 0)
-            .map((item) => item.num * item.price)
-            .reduce((prev, curr) => (prev + curr)) * 100
+        // exists one goods in bar, default drink always not null
+        if (this.sideBarList && this.sideBarList[0].items) {
+          this.sideBarList.forEach(list => {
+            let items = list.items;
+            if (!items) {
+              return true;
+            }
+            let currentItems = items.filter((item) => item.count > 0);
+            if (currentItems != false) {
+              let totalOfThisType = currentItems.filter((item) => item.count > 0)
+                .map((item) => item.count * item.price)
+                .reduce((prev, curr) => (prev + curr)) * 100
+              total += totalOfThisType;
+            }
+          });
         } else {
           total = 0
         }
         this.$app.$options.globalData.order.totalPrice = total
         return total
       },
-      disableSubmit: function() {
-        return this.shopItemList && this.shopItemList.every((item) => item.num <= 0)
+      disableSubmit: function () {
+        let hasGoodsInCar = true;
+        this.sideBarList.forEach(list => {
+          let items = list.items;
+          if (!items) {
+            return true;
+          }
+          let currentItems = items.filter((item) => item.count > 0);
+          if (currentItems != false) {
+            hasGoodsInCar = false;
+            return false;
+          }
+        });
+        return hasGoodsInCar;
       }
     },
+    onReady() {
+      const systemConfig = wx.getSystemInfoSync()
+      this.itemBoxHeight = systemConfig.windowHeight - 50
+    },
     onLoad() {
-      this.shopItemList = this.getShopItemList()
       eventHub.$on('clearCart', () => {
-        this.shopItemList && this.shopItemList.forEach(item => item.num = 0)
+        this.sideBarList && this.sideBarList.forEach(list => {
+          let items = list.items;
+          if (items && items.length > 0) {
+            items.forEach(item => item.count = 0)
+          }
+        });
         this.$app.$options.globalData.order.totalPrice = 0
         this.$app.$options.globalData.order.products = []
       })
     },
-    onShow() {
-      getCurrentPages().pop().getTabBar().setData({
-        active: this.$app.$options.globalData.currentTabIndex
+    async onShow() {
+      let query = wx.createSelectorQuery()
+      query.select('#drinks').boundingClientRect()
+      query.select('#snacks').boundingClientRect()
+      query.select('#daily').boundingClientRect()
+      query.exec((res) => {
+        this.top0 = res[0].top
+        this.top1 = res[1].top
+        this.top2 = res[2].top
       })
+    },
+    methods: {
+      plus: function (e) {
+        const id = e.currentTarget.dataset.index;
+        this.sideBarList.forEach(list => {
+          let items = list.items;
+          if (!items) {
+            return true;
+          }
+          let currentItem = items.find((item) => item.id === id);
+          if (currentItem) {
+            currentItem.count++;
+            return false;
+          }
+        })
+      },
+      minus: function (e) {
+        const id = e.currentTarget.dataset.index
+        this.sideBarList.forEach(list => {
+          let items = list.items;
+          if (!items) {
+            return true;
+          }
+          let currentItem = items.find((item) => item.id === id);
+          if (currentItem && currentItem.count > 0) {
+            items.find((item) => item.id === id).count--;
+            return false;
+          }
+        })
+      },
+      onChange(e) {
+        this.toView = this.sideBarList[e.$wx.detail].type
+      },
+      scrollTo(e) {
+        let scrollTop = e.$wx.detail.scrollTop + 23  // 滚动的Y轴
+
+        if (scrollTop >= this.top2) {
+          this.activeKey = 2
+        } else if (scrollTop >= this.top1) {
+          this.activeKey = 1
+        } else {
+          this.activeKey = 0
+        }
+      },
+      navigateToOrder() {
+        if (this.selectedGoods.length > 0) {
+          this.$app.$options.globalData.order.products = this.selectedGoods;
+          this.submitBarClose();
+          this.$navigate('../order/index')
+        }
+      },
+      listSelectedItem: function () {
+        this.isShopCarShow = true
+      },
+      submitBarClose: function () {
+        this.isShopCarShow = false
+      }
     }
   })
 </script>
 
+<style>
+  ::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
 <config>
   {
-    "usingComponents": {
-      "van-card": "../../components/vant/card/index",
-      "van-button": "../../components/vant/button/index",
-      "van-submit-bar": "../../components/vant/submit-bar/index",
-      "van-action-sheet": "../../components/vant/action-sheet/index"
-    }
+  "usingComponents": {
+  "van-sidebar": "../../components/vant/sidebar/index",
+  "van-sidebar-item": "../../components/vant/sidebar-item/index",
+  "van-card": "../../components/vant/card/index",
+  "van-icon": "../../components/vant/icon/index",
+  "van-stepper": "../../components/vant/stepper/index",
+  "van-button": "../../components/vant/button/index",
+  "van-submit-bar": "../../components/vant/submit-bar/index",
+  "van-action-sheet": "../../components/vant/action-sheet/index"
+  }
   }
 </config>
 
 <style>
-.van-submit-bar {
-  bottom: 50px !important;
-}
-
-.van-popup {
-  bottom: 50px !important;
-}
-
-@keyframes circle-draw{
-  80% {
-    stroke-dashoffset: 0;
+  .van-submit-bar {
+    bottom: 50px !important;
   }
-}
+
+  .van-popup {
+    bottom: 50px !important;
+  }
+
+  @keyframes circle-draw {
+    80% {
+      stroke-dashoffset: 0;
+    }
+  }
 
 </style>
