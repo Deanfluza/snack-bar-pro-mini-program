@@ -48,7 +48,7 @@ wepy.page({
       const order = this.orderList.find(n => n.orderNumber === this.selectedOrderNumber)
       const shopItemList = order ? order.products : []
       if (shopItemList && shopItemList.length > 0) {
-        return shopItemList.reduce((accumulator, item) => accumulator + `${item.title} x ${item.num}\n`, '')
+        return shopItemList.reduce((accumulator, item) => accumulator + `${item.title} x ${item.count}\n`, '')
       } else {
         return ''
       }
