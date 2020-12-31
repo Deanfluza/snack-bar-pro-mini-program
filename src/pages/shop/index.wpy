@@ -207,19 +207,14 @@
         return total
       },
       disableSubmit: function () {
-        let hasGoodsInCar = true
-        this.sideBarList.forEach(list => {
-          let items = list.items
-          if (!items) {
-            return true
-          }
-          let currentItems = items.filter((item) => item.count > 0)
-          if (currentItems !== false) {
-            hasGoodsInCar = false
+        for (const list of this.sideBarList) {
+          const items = list.items
+          const hasGoodsInCar = items && items.some((item) => item.count > 0)
+          if (hasGoodsInCar) {
             return false
           }
-        })
-        return hasGoodsInCar
+        }
+        return true
       }
     },
     onReady() {
