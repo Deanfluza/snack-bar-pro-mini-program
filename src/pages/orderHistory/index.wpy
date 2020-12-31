@@ -53,34 +53,16 @@ wepy.page({
       }
     },
     orderListModel: function() {
+      const statusMap = new Map([
+        ['pending', {type: 'default', text: 'Pending'}],
+        ['processing', {type: 'warning', text: 'Processing'}],
+        ['reached', {type: 'primary', text: 'Car Reached'}],
+        ['completed', {type: 'success', text: 'Completed'}],
+        ['error', {type: 'danger', text: 'Error'}]
+      ]);
       let model = this.orderList
       model.forEach((order) => {
-        if (order.orderStatus === 'processing') {
-          order.stautsTag = {
-            type: 'warning',
-            text: 'Processing'
-          }
-        } else if (order.orderStatus === 'reached') {
-          order.stautsTag = {
-            type: 'primary',
-            text: 'Car Reached'
-          }
-        } else if (order.orderStatus === 'completed') {
-          order.stautsTag = {
-            type: 'success',
-            text: 'Completed'
-          }
-        } else if (order.orderStatus === 'error') {
-          order.stautsTag = {
-            type: 'danger',
-            text: 'Error'
-          }
-        } else if (order.orderStatus === 'pending') {
-          order.stautsTag = {
-            type: 'warning',
-            text: 'Pending'
-          }
-        }
+        order.stautsTag = statusMap.get(order.orderStatus) || {type: 'danger', text: 'Unknown'}
       })
       return model
     }
@@ -112,7 +94,9 @@ wepy.page({
       this.isShowOrderDetailDialog = false
     },
     getOrderHistory() {
-      return getAllOrders().then((res) => {
+      const openid = wx.getStorageSync('openid')
+      console.log(openid)
+      return getAllOrders({openid}).then((res) => {
         this.orderList = res.data.map(item => {
           return {
             orderNumber: item._id,

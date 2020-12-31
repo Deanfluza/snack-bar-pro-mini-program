@@ -7,8 +7,8 @@ exports.createOrder = (order) => {
   return axios.post(url, order)
 }
 
-exports.getAllOrders = () => {
-  const url = `${perfix}/orders`
+exports.getAllOrders = (params) => {
+  const url = `${perfix}/orders?openid=${params.openid}`
   return axios.get(url)
 }
 
