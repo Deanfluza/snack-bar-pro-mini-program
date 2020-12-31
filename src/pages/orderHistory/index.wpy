@@ -6,7 +6,6 @@
                 bind:click="showOrderDetail"
                 data-orderNumber ="{{order.orderNumber}}"
       >
-
         <view slot="title">
           <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
           <van-tag v-bind:type="order.stautsTag.type">{{ order.stautsTag.text }}</van-tag>
@@ -71,28 +70,26 @@ wepy.page({
             type: 'success',
             text: 'Completed'
           }
+        } else if (order.orderStatus === 'error') {
+          order.stautsTag = {
+            type: 'danger',
+            text: 'Error'
+          }
+        } else if (order.orderStatus === 'pending') {
+          order.stautsTag = {
+            type: 'warning',
+            text: 'Pending'
+          }
         }
       })
       return model
-    },
-    currentOrderNumber: function() {
-      if (this.orderList && this.orderList.length > 0) {
-        const order = this.orderList.find((order) => order.orderStatus !== 'completed')
-        return order ? order.orderNumber : ''
-      } else {
-        return ''
-      }
     }
   },
   methods: {
     showOrderDetail: function(e) {
-      this.selectedOrderNumber = e.currentTarget.dataset.ordernumber
-      if (this.selectedOrderNumber === this.currentOrderNumber &&
-        this.orderList.find((order) => order.orderNumber === this.currentOrderNumber).orderStatus === 'reached') {
-        this.isShowDialogConfirmButton = true
-      } else {
-        this.isShowDialogConfirmButton = false
-      }
+      const { ordernumber, orderStatus } = e.currentTarget.dataset
+      this.selectedOrderNumber = ordernumber
+      this.isShowDialogConfirmButton = orderStatus === 'reached'
       this.isShowOrderDetailDialog = true
     },
     completeOrder: function() {
@@ -100,7 +97,7 @@ wepy.page({
       this.autoCompleteOrder()
     },
     autoCompleteOrder: function() {
-      let currentOrder = this.orderList.find(order => order.orderNumber === this.currentOrderNumber)
+      let currentOrder = this.orderList.find(order => order.orderNumber === this.selectedOrderNumber)
       const cloneOrder = _.cloneDeep(currentOrder)
       cloneOrder.orderStatus = 'completed'
       cloneOrder.completeDateTime = new Date().getTime()
@@ -109,21 +106,6 @@ wepy.page({
         this.isShowOrderDetailDialog = false
         this.isShowDialogConfirmButton = false
         goTarget(this.$app.$options.globalData.homePose)
-      })
-    },
-    reachedEvent: function() {
-      clearInterval(this.intervalId)
-      let currentOrder = this.orderList.find((order) => order.orderNumber === this.currentOrderNumber)
-      currentOrder.orderStatus = 'reached'
-      updateOrder(currentOrder).then((res) => {
-        currentOrder = {...res.data}
-        this.isShowDialogConfirmButton = true
-        setTimeout(() => {
-          let currentOrder = this.orderList.find((order) => order.orderNumber === this.currentOrderNumber)
-          if (currentOrder.orderStatus === 'reached') {
-            this.autoCompleteOrder()
-          }
-        }, 60000)
       })
     },
     closeOrderDetail: function() {
@@ -150,23 +132,11 @@ wepy.page({
     }
   },
   onShow() {
-    this.getOrderHistory().then(() => {
-      this.intervalId = setInterval(() => {
-        getCarReachStatus()
-          .then((res) => {
-            const isReached = res.data.reached
-            if (isReached) {
-              this.reachedEvent()
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      }, 1000)
-    })
+    this.getOrderHistory()
     getCurrentPages().pop().getTabBar().setData({
       active: this.$app.$options.globalData.currentTabIndex
     })
+    this.intervalId = setInterval(() => { this.getOrderHistory() }, 1000)
   },
   onHide() {
     clearInterval(this.intervalId)

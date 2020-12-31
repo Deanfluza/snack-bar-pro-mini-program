@@ -56,7 +56,6 @@
         this.order.openid = wx.getStorageSync('openid')
         createOrder(this.order)
           .then(() => {
-            goTarget(this.$app.$options.globalData.order.address)
             eventHub.$emit('clearCart')
             this.$app.$options.globalData.currentTabIndex = 1
             wx.switchTab({ url: '../orderHistory/index' })
