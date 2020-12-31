@@ -53,6 +53,7 @@
         console.log(this)
       },
       submitOrder() {
+        this.order.openid = wx.getStorageSync('openid')
         createOrder(this.order)
           .then(() => {
             goTarget(this.$app.$options.globalData.order.address)

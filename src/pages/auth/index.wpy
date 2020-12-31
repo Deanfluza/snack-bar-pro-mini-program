@@ -6,6 +6,7 @@
 
 <script>
   import wepy from '@wepy/core'
+  import {login} from '../../api/login'
   
   wepy.page({
     methods: {
@@ -13,6 +14,16 @@
         wx.setStorage({
           key: 'userInfo',
           data: res.$wx.detail.userInfo
+        })
+        wx.login({
+          success(res) {
+            login(res.code).then((result) => {
+              wx.setStorage({
+                key: 'openid',
+                data: result.data.openid
+              })
+            })
+          }
         })
         wx.switchTab({url: '../shop/index'})
       }

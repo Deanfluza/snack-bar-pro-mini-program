@@ -214,7 +214,7 @@
             return true
           }
           let currentItems = items.filter((item) => item.count > 0)
-          if (currentItems != false) {
+          if (currentItems !== false) {
             hasGoodsInCar = false
             return false
           }
@@ -223,6 +223,10 @@
       }
     },
     onReady() {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo) {
+        this.$redirect('../auth/index')
+      }
       const systemConfig = wx.getSystemInfoSync()
       this.itemBoxHeight = systemConfig.windowHeight - 50
     },
