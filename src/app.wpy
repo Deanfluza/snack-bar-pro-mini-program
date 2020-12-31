@@ -41,6 +41,12 @@
           w: 0.999995180665
         }
       }
+    },
+    onShow(options) {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo && options.path !== 'pages/auth/index') {
+        wx.navigateTo({url: 'pages/auth/index'})
+      }
     }
   })
 
@@ -51,7 +57,8 @@
       "pages/shop/index",
       "pages/order/index",
       "pages/orderHistory/index",
-      "pages/address/index"
+      "pages/address/index",
+      "pages/auth/index"
     ],
     "tabBar": {
       "custom": true,

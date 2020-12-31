@@ -1,0 +1,21 @@
+<template>
+  <div style="display: flex;align-items: center;margin-top: 55%">
+    <button open-type="getUserInfo" bindgetuserinfo="setUserInfo" type="primary" plain="true">请授权用户信息</button>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core'
+  
+  wepy.page({
+    methods: {
+      setUserInfo(res) {
+        wx.setStorage({
+          key: 'userInfo',
+          data: res.$wx.detail.userInfo
+        })
+        wx.switchTab({url: '../shop/index'})
+      }
+    }
+  })
+</script>
