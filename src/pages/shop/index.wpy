@@ -218,8 +218,8 @@
       }
     },
     onReady() {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (!userInfo) {
+      const openid = wx.getStorageSync('openid')
+      if (!openid) {
         this.$redirect('../auth/index')
       }
       const systemConfig = wx.getSystemInfoSync()

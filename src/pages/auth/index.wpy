@@ -11,21 +11,15 @@
   wepy.page({
     methods: {
       setUserInfo(res) {
-        wx.setStorage({
-          key: 'userInfo',
-          data: res.$wx.detail.userInfo
-        })
+        wx.setStorageSync('userInfo', res.$wx.detail.userInfo)
         wx.login({
           success(res) {
             login(res.code).then((result) => {
-              wx.setStorage({
-                key: 'openid',
-                data: result.data.openid
-              })
+              wx.setStorageSync('openid', result.data.openid)
+              wx.switchTab({url: '../shop/index'})
             })
           }
         })
-        wx.switchTab({url: '../shop/index'})
       }
     }
   })
