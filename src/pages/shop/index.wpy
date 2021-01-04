@@ -1,14 +1,15 @@
 <template>
+  <div style="height: 30px; width: 100%; background: #b80d1b; color: #ffffff; line-height: 30px; font-weight: bolder; border: 1px solid #ffffff;">Snack Bar Pro</div>
   <div class="page_tab_h" style="display: flex;overflow: hidden;">
-    <div>
-      <van-sidebar active-key="{{ activeKey }}" bind:change="onChange">
+    <div style="background: #fafafa">
+      <van-sidebar v-model="activeKey" bind:change="onChange">
         <van-sidebar-item v-for="sideBarItem in sideBarList" :title="sideBarItem.title" :badge="sideBarItem.badge"/>
       </van-sidebar>
     </div>
     <scroll-view scroll-y style="height: {{itemBoxHeight}}px" scroll-into-view="{{toView}}" bindscroll="scrollTo">
       <div v-for="sideBarItem in sideBarList">
-        <div :id="sideBarItem.category">
-          <div style="position: sticky; top: 0;width: 100%">
+        <div :id="sideBarItem.type">
+          <div class="item-title">
             {{sideBarItem.title}}
           </div>
           <div>
@@ -39,7 +40,8 @@
           disabled="{{ disableSubmit }}"
         />
       </view>
-      <van-action-sheet show="{{ isShopCarShow }}" title="已选商品" bind:close="submitBarClose">
+      <van-action-sheet show="{{ isShopCarShow }}" title="已选商品" bind:close="submitBarClose" cancel-text="提交" @cancel="navigateToOrder">
+        <div style="max-height: 400px; overflow-y:scroll">
         <repeat wx:for="{{selectedGoods}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
           <van-card
             price="{{ shopItem.price }}"
@@ -53,9 +55,10 @@
             </view>
           </van-card>
         </repeat>
-        <van-button disabled="{{disableSubmit}}" type="danger" @click="navigateToOrder"
-                    style="float: right; margin-right: 25px; margin-bottom: 2px; margin-top: 2px">提交
-        </van-button>
+        </div>
+<!--        <div>-->
+<!--          <van-button type="danger" @click="navigateToOrder" style="position: absolute; bottom: 0; right: 0;">提交</van-button>-->
+<!--        </div>-->
       </van-action-sheet>
     </view>
   </div>
@@ -66,6 +69,7 @@
   import eventHub from '../../common/eventHub'
   import { baseUrl } from '../../common/constant.js'
   import { getAllCommodity } from '../../api/commodity'
+  import _ from 'lodash'
 
   wepy.page({
     data: {
@@ -79,20 +83,20 @@
       drinkGoods: null,
       snacksGoods: null,
       sideBarList: [{
-          title: '饮料',
-          type: 'drinks',
-          badge: '',
-          items: []
-      },{
-          title: '零食',
-          type: 'snacks',
-          badge: '',
-          items: []
+        title: '饮料',
+        type: 'drinks',
+        badge: '',
+        items: []
       }, {
-          title: '生活用品',
-          badge: '',
-          type: 'daily',
-          items: []
+        title: '零食',
+        type: 'snacks',
+        badge: '',
+        items: []
+      }, {
+        title: '生活用品',
+        badge: '',
+        type: 'daily',
+        items: []
       }],
       isShopCarShow: false
     },
@@ -106,7 +110,7 @@
               return true
             }
             let currentItems = items.filter((item) => item.count > 0)
-            if (currentItems != false) {
+            if (!_.isEmpty(currentItems)) {
               selectedItems.push.apply(selectedItems, currentItems)
             }
           })
@@ -125,7 +129,7 @@
               return true
             }
             let currentItems = items.filter((item) => item.count > 0)
-            if (currentItems != false) {
+            if (!_.isEmpty(currentItems)) {
               let totalOfThisType = currentItems.filter((item) => item.count > 0)
                 .map((item) => item.count * item.price)
                 .reduce((prev, curr) => (prev + curr)) * 100
@@ -149,6 +153,12 @@
         return true
       }
     },
+    watch: {
+      selectedGoods () {
+        let query = wx.createSelectorQuery();
+        query.select('#drinks').boundingClientRect()
+      }
+    },
     onReady() {
       const token = wx.getStorageSync('token')
       if (!token) {
@@ -156,6 +166,7 @@
       }
       const systemConfig = wx.getSystemInfoSync()
       this.itemBoxHeight = systemConfig.windowHeight - 50
+
     },
     onLoad() {
       eventHub.$on('clearCart', () => {
@@ -171,6 +182,7 @@
     },
     async onShow() {
       let query = wx.createSelectorQuery()
+      console.log(query.select('#drinks'));
       query.select('#drinks').boundingClientRect()
       query.select('#snacks').boundingClientRect()
       query.select('#daily').boundingClientRect()
@@ -182,6 +194,7 @@
     },
     created() {
       this.getSideBarList()
+      console.log('1111');
     },
     methods: {
       plus: function (e) {
@@ -217,7 +230,6 @@
       },
       scrollTo(e) {
         let scrollTop = e.$wx.detail.scrollTop + 23  // 滚动的Y轴
-
         if (scrollTop >= this.top2) {
           this.activeKey = 2
         } else if (scrollTop >= this.top1) {
@@ -240,17 +252,17 @@
         this.isShopCarShow = false
       },
       async getSideBarList() {
-          let response = await getAllCommodity()
-          let commodities = response.data.data
-          for (let commodityKey in commodities) {
-              commodities[commodityKey].count = 0
-          }
-          let drinks = commodities.filter((commodity) => commodity.category === 'drinks')
-          let snacks = commodities.filter((commodity) => commodity.category === 'snacks')
-          let daily = commodities.filter((commodity) => commodity.category === 'daily')
-          this.sideBarList.find((sideBar) => sideBar.type === 'drinks').items = drinks
-          this.sideBarList.find((sideBar) => sideBar.type === 'snacks').items = snacks
-          this.sideBarList.find((sideBar) => sideBar.type === 'daily').items = daily
+        let response = await getAllCommodity()
+        let commodities = response.data.data
+        for (let commodityKey in commodities) {
+          commodities[commodityKey].count = 0
+        }
+        let drinks = commodities.filter((commodity) => commodity.category === 'drinks')
+        let snacks = commodities.filter((commodity) => commodity.category === 'snacks')
+        let daily = commodities.filter((commodity) => commodity.category === 'daily')
+        this.sideBarList.find((sideBar) => sideBar.type === 'drinks').items = drinks
+        this.sideBarList.find((sideBar) => sideBar.type === 'snacks').items = snacks
+        this.sideBarList.find((sideBar) => sideBar.type === 'daily').items = daily
       }
     }
   })
@@ -284,8 +296,29 @@
 
   .van-popup {
     bottom: 50px !important;
-  }
+    overflow-y: hidden !important;
 
+  }
+  .van-button--danger {
+    background: #b80d1b !important;
+  }
+  .view {
+    border: none !important;
+  }
+  .van-action-sheet__cancel {
+    background: #b80d1b !important;
+    color: #ffffff !important;
+  }
+  .item-title {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: #fafafa;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: bolder;
+    margin-left: 5px;
+  }
   @keyframes circle-draw {
     80% {
       stroke-dashoffset: 0;

@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="752f3f26-6dee-40fb-a802-fe665af64cb5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/snack-bar-pro-mini-program.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/vant/action-sheet/index.wxss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/vant/action-sheet/index.wxss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/shop/index.wpy" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/shop/index.wpy" afterDir="false" />
     </list>
@@ -26,15 +18,6 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/map/station/index.wpy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="16" column="35" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/my-card/index.wpy">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-184" />
@@ -49,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pages/shop/index.wpy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
+            <state relative-caret-position="104">
+              <caret line="287" column="3" lean-forward="true" selection-start-line="287" selection-start-column="3" selection-end-line="287" selection-end-column="3" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#template#0;n#!!top" expanded="true" />
@@ -61,6 +44,11 @@
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/submit-bar/index.wpy">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -180,30 +168,14 @@
               <item name="snack-bar-pro-mini-program" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
+              <item name="order-complete" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="snack-bar-pro-mini-program" type="b2602c69:ProjectViewProjectNode" />
               <item name="snack-bar-pro-mini-program" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
-              <item name="point" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snack-bar-pro-mini-program" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snack-bar-pro-mini-program" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="map" type="462c0819:PsiDirectoryNode" />
-              <item name="station" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="snack-bar-pro-mini-program" type="b2602c69:ProjectViewProjectNode" />
-              <item name="snack-bar-pro-mini-program" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="my-card" type="462c0819:PsiDirectoryNode" />
+              <item name="submit-bar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="snack-bar-pro-mini-program" type="b2602c69:ProjectViewProjectNode" />
@@ -269,16 +241,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1609726716944</updated>
-      <workItem from="1609726718356" duration="10445000" />
+      <workItem from="1609726718356" duration="11190000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10445000" />
+    <option name="totallyTimeSpent" value="11190000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="npm" side_tool="true" />
       <window_info id="Favorites" side_tool="true" />
@@ -367,10 +338,13 @@
     <entry file="file://$PROJECT_DIR$/src/api/order.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/submit-bar/index.wpy">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/shop/index.wpy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
+        <state relative-caret-position="104">
+          <caret line="287" column="3" lean-forward="true" selection-start-line="287" selection-start-column="3" selection-end-line="287" selection-end-column="3" />
           <folding>
             <element signature="n#style#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#template#0;n#!!top" expanded="true" />
