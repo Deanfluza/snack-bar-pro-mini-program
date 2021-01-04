@@ -92,7 +92,6 @@ wepy.page({
         _.assign(currentOrder, res.data)
         this.isShowOrderDetailDialog = false
         this.isShowDialogConfirmButton = false
-        goTarget(this.$app.$options.globalData.homePose)
       })
     },
     closeOrderDetail: function() {
