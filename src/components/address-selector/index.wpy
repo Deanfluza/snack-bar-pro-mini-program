@@ -1,36 +1,64 @@
 <template>
-  <van-cell
-    is-link
-    title="{{ title || 'Please select address' }}"
-    link-type="navigateTo"
-    url="/pages/address/index"
-  />
+  <div style="height: 134px; margin-bottom: 5px">
+    <van-notice-bar
+      speed="{{30}}"
+      left-icon="volume-o"
+      text="please select a address before you submit your order!"
+    />
+    <van-cell
+      is-link
+      title="{{ tip }}"
+      link-type="navigateTo"
+      url="/pages/address/index"
+    />
+    <div style="background: #ffffff;border-radius: 0 0 15px 15px;height: 50px;">
+      <div style="margin-left: 15px; margin-right: 15px;padding-top: 17px;">
+        <van-row v-if="isSelectedAddress" style="font-size: 16px; font-weight: bold; line-height: 16px;">
+          <van-col span="8">Address:</van-col>
+          <van-col span="16" style="text-align: right">{{title || 'please select an address'}}</van-col>
+        </van-row>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
 import wepy from '@wepy/core'
-
+import _ from 'lodash'
 wepy.component({
   data: {
-    selectedAddr: undefined
+    selectedAddr: undefined,
+    tip: 'Click here to select an address.'
   },
   props: {
     title: {
       type: String,
-      default: 'Please select address'
+      default: ''
+    }
+  },
+  computed: {
+    isSelectedAddress () {
+      return !_.isEmpty(this.title);
     }
   }
+
 })
 </script>
 
 <style>
-
+  .van-cell {
+    border-radius: 15px 15px 0 0 !important;
+  }
 </style>
 
 <config>
 {
   "usingComponents": {
     "van-cell": "../vant/cell/index",
+    "van-notice-bar": "../vant/notice-bar/index",
+    "van-row": "../vant/row/index",
+    "van-col": "../vant/col/index"
   }
 }
 </config>

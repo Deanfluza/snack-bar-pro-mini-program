@@ -103,7 +103,6 @@ wepy.page({
     // this.scrollWidth = wx.getSystemInfoSync().windowWidth
     // -tabbar height
     this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50
-    console.log(this.scrollHeight)
     const originWidth = 863
     const originHeight = 621
     const resetWidth = originWidth * this.scrollHeight / originHeight

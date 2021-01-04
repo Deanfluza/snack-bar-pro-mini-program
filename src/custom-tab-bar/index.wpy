@@ -15,7 +15,7 @@ import wepy from '@wepy/core';
 wepy.component({
   data: {
     active: 0,
-    selectedColor: '#ff7e67',
+    selectedColor: '#b80d1b',
     list: [
       {
         pagePath: '/pages/shop/index',

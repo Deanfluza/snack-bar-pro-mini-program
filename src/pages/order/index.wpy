@@ -16,25 +16,37 @@
     width: 64px;
     height: 64px;
   }
+  .van-button--danger {
+    background: #b80d1b !important;
+  }
 
   @keyframes circle-draw{
     80% {
       stroke-dashoffset: 0;
     }
   }
+  .order-page {
+    background: linear-gradient(#b80d1b, #ffffff);
+    height: 600px;
+    width: 100%;
+  }
 
 
 </style>
 <template>
   <view>
-    <address-selector :title="order.address.title"></address-selector>
-    <my-card :options="order.products"></my-card>
-    <van-toast id="van-toast" />
-    <van-submit-bar
-      :price="order.totalPrice"
-      button-text="提交订单"
-      bind:submit="submitOrder"
-    />
+    <div class="order-page">
+      <address-selector :title="order.address.title"></address-selector>
+      <my-card :options="order.products"></my-card>
+      <van-toast id="van-toast" />
+      <van-submit-bar
+        :price="order.totalPrice"
+        disabled="{{isSelectedAddress}}"
+        button-text="提交订单"
+        bind:submit="submitOrder"
+      />
+    </div>
+
   </view>
 </template>
 
@@ -43,10 +55,11 @@
   import { goTarget } from '../../api/car'
   import { createOrder } from '../../api/order'
   import eventHub from '../../common/eventHub'
-
+  import _ from 'lodash'
   wepy.page({
     data: {
-      status: 'start'
+      status: 'start',
+      isSelectedAddress: true,
     },
     methods: {
       submitOrder() {
@@ -63,10 +76,14 @@
       }
     },
     computed: {
-      order() {
-        return this.$app.$options.globalData.order
+      order () {
+        let newOrder = _.clone(this.$app.$options.globalData.order)
+        return newOrder;
+      },
+      isSelectedAddress () {
+        return _.isEmpty(this.order.address.title);
       }
-    }
+    },
   })
 </script>
 

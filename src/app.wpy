@@ -68,9 +68,9 @@
     },
     "window": {
       "backgroundTextStyle": "light",
-      "navigationBarBackgroundColor": "#fff",
-      "navigationBarTitleText": "WeChat",
-      "navigationBarTextStyle": "black"
+      "navigationBarBackgroundColor": "#b80d1b",
+      "navigationBarTitleText": "Snack Bar Pro",
+      "navigationBarTextStyle": "white"
     }
   }
 </config>
