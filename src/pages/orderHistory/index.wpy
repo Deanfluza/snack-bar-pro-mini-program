@@ -99,9 +99,7 @@ wepy.page({
       this.isShowOrderDetailDialog = false
     },
     getOrderHistory() {
-      const openid = wx.getStorageSync('openid')
-      console.log(openid)
-      return getAllOrders({openid}).then((res) => {
+      return getAllOrders().then((res) => {
         this.orderList = res.data.map(item => {
           return {
             orderNumber: item._id,

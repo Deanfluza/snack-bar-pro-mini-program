@@ -49,11 +49,7 @@
       status: 'start'
     },
     methods: {
-      shop: () => {
-        console.log(this)
-      },
       submitOrder() {
-        this.order.openid = wx.getStorageSync('openid')
         this.order.user = wx.getStorageSync('userInfo').nickName
         createOrder(this.order)
           .then(() => {
