@@ -8,14 +8,14 @@
                 data-orderStatus = "{{order.orderStatus}}"
       >
         <view slot="title">
-          <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
+          <view class="van-cell-text">{{ order.address.title }}</view>
           <van-tag v-bind:type="order.stautsTag.type">{{ order.stautsTag.text }}</van-tag>
         </view>
       </van-cell>
     </repeat>
 
     <van-dialog
-      title="order: {{ selectedOrderNumber }}"
+      title="{{ selectedOrder.address.title }}"
       show="{{ isShowOrderDetailDialog }}"
       message="{{ orderDetailString }}"
       show-cancel-button
@@ -52,6 +52,9 @@ wepy.page({
       } else {
         return ''
       }
+    },
+    selectedOrder() {
+      return this.orderList.find(n => n.orderNumber === this.selectedOrderNumber)
     },
     orderListModel: function() {
       const statusMap = new Map([
