@@ -7,8 +7,8 @@
     </div>
     <scroll-view scroll-y style="height: {{itemBoxHeight}}px" scroll-into-view="{{toView}}" bindscroll="scrollTo">
       <div v-for="sideBarItem in sideBarList">
-        <div :id="sideBarItem.type">
-          <div style="position: sticky; top: 0;width: 100%;border: 1px solid gainsboro">
+        <div :id="sideBarItem.category">
+          <div style="position: sticky; top: 0;width: 100%">
             {{sideBarItem.title}}
           </div>
           <div>
@@ -20,8 +20,8 @@
                 num="{{ shopItem.count }}"
               >
                 <view slot="footer">
-                  <van-button size="mini" round icon="plus" data-index="{{shopItem.id}}" bind:click="plus"></van-button>
-                  <van-button size="mini" round icon="minus" data-index="{{shopItem.id}}"
+                  <van-button size="mini" round icon="plus" data-index="{{shopItem._id}}" bind:click="plus"></van-button>
+                  <van-button size="mini" round icon="minus" data-index="{{shopItem._id}}"
                               bind:click="minus"></van-button>
                 </view>
               </van-card>
@@ -43,13 +43,13 @@
         <repeat wx:for="{{selectedGoods}}" wx:key="index" wx:for-index="index" wx:for-item="shopItem">
           <van-card
             price="{{ shopItem.price }}"
-            title="{{ shopItem.title }}"
+            title="{{ shopItem. title }}"
             thumb="{{ baseUrl }}{{ shopItem.thumb }}"
             num="{{ shopItem.count }}"
           >
             <view slot="footer">
-              <van-button size="mini" round icon="plus" data-index="{{shopItem.id}}" bind:click="plus"></van-button>
-              <van-button size="mini" round icon="minus" data-index="{{shopItem.id}}" bind:click="minus"></van-button>
+              <van-button size="mini" round icon="plus" data-index="{{shopItem._id}}" bind:click="plus"></van-button>
+              <van-button size="mini" round icon="minus" data-index="{{shopItem._id}}" bind:click="minus"></van-button>
             </view>
           </van-card>
         </repeat>
@@ -65,6 +65,7 @@
   import wepy from '@wepy/core'
   import eventHub from '../../common/eventHub'
   import { baseUrl } from '../../common/constant.js'
+  import { getAllCommodity } from '../../api/commodity'
 
   wepy.page({
     data: {
@@ -77,91 +78,22 @@
       top2: 0,
       drinkGoods: null,
       snacksGoods: null,
-      sideBarList: [
-        {
+      sideBarList: [{
           title: '饮料',
           type: 'drinks',
           badge: '',
-          items: [{
-            id: 1,
-            price: 2.5,
-            title: '可乐',
-            thumb: '/static/image/shopItemImage/coco.jpg',
-            count: 0,
-            type: 'drinks'
-          },
-          {
-            id: 2,
-            price: 2.5,
-            title: '雪碧',
-            thumb: '/static/image/shopItemImage/sprite.jpg',
-            count: 0,
-            type: 'drinks'
-          },
-          {
-            id: 3,
-            price: 2.5,
-            title: '芬达',
-            thumb: '/static/image/shopItemImage/fenda.png',
-            count: 0,
-            type: 'drinks'
-          },
-          {
-            id: 4,
-            price: 2.5,
-            title: '果粒橙',
-            thumb: '/static/image/shopItemImage/guolicheng.png',
-            count: 0,
-            type: 'drinks'
-          },
-          {
-            id: 5,
-            price: 2.5,
-            title: '维他奶',
-            thumb: '/static/image/shopItemImage/weitanai.jpg',
-            count: 0,
-            type: 'drinks'
-          },
-          {
-            id: 6,
-            price: 2.5,
-            title: '无糖可乐',
-            thumb: '/static/image/shopItemImage/wutangkele.jpg',
-            count: 0,
-            type: 'drinks'
-          }]
-        },
-        {
+          items: []
+      },{
           title: '零食',
           type: 'snacks',
           badge: '',
-          items: [{
-            id: 7,
-            price: 2.5,
-            title: '乐事薯片',
-            thumb: '/static/image/shopItemImage/leshi.jpg',
-            count: 0,
-            type: 'snacks'
-          },
-          {
-            id: 8,
-            price: 2.5,
-            title: '口香糖',
-            thumb: '/static/image/shopItemImage/yida.png',
-            count: 0,
-            type: 'snacks'
-          },
-          {
-            id: 9,
-            price: 2.5,
-            title: '卡乐比虾条',
-            thumb: '/static/image/shopItemImage/kalebi.jpeg',
-            count: 0,
-            type: 'snacks'
-          }]
-        },
-        {title: '生活用品', badge: '', type: 'daily'}
-      ],
+          items: []
+      }, {
+          title: '生活用品',
+          badge: '',
+          type: 'daily',
+          items: []
+      }],
       isShopCarShow: false
     },
     computed: {
@@ -218,8 +150,8 @@
       }
     },
     onReady() {
-      const openid = wx.getStorageSync('openid')
-      if (!openid) {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo) {
         this.$redirect('../auth/index')
       }
       const systemConfig = wx.getSystemInfoSync()
@@ -248,6 +180,9 @@
         this.top2 = res[2].top
       })
     },
+    created() {
+      this.getSideBarList()
+    },
     methods: {
       plus: function (e) {
         const id = e.currentTarget.dataset.index
@@ -256,7 +191,7 @@
           if (!items) {
             return true
           }
-          let currentItem = items.find((item) => item.id === id)
+          let currentItem = items.find((item) => item._id === id)
           if (currentItem) {
             currentItem.count++
             return false
@@ -270,9 +205,9 @@
           if (!items) {
             return true
           }
-          let currentItem = items.find((item) => item.id === id)
+          let currentItem = items.find((item) => item._id === id)
           if (currentItem && currentItem.count > 0) {
-            items.find((item) => item.id === id).count--
+            items.find((item) => item._id === id).count--
             return false
           }
         })
@@ -303,6 +238,19 @@
       },
       submitBarClose: function () {
         this.isShopCarShow = false
+      },
+      async getSideBarList() {
+          let response = await getAllCommodity()
+          let commodities = response.data.data
+          for (let commodityKey in commodities) {
+              commodities[commodityKey].count = 0
+          }
+          let drinks = commodities.filter((commodity) => commodity.category === 'drinks')
+          let snacks = commodities.filter((commodity) => commodity.category === 'snacks')
+          let daily = commodities.filter((commodity) => commodity.category === 'daily')
+          this.sideBarList.find((sideBar) => sideBar.type === 'drinks').items = drinks
+          this.sideBarList.find((sideBar) => sideBar.type === 'snacks').items = snacks
+          this.sideBarList.find((sideBar) => sideBar.type === 'daily').items = daily
       }
     }
   })
