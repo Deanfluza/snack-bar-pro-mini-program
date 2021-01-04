@@ -150,8 +150,8 @@
       }
     },
     onReady() {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (!userInfo) {
+      const token = wx.getStorageSync('token')
+      if (!token) {
         this.$redirect('../auth/index')
       }
       const systemConfig = wx.getSystemInfoSync()

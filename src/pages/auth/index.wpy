@@ -15,7 +15,7 @@
         wx.login({
           success(res) {
             login(res.code).then((result) => {
-              wx.setStorageSync('openid', result.data.openid)
+              wx.setStorageSync('token', result.data)
               wx.switchTab({url: '../shop/index'})
             })
           }
