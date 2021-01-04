@@ -1,29 +1,40 @@
 {
-	"description": "snack bar pro mini program",
-	"setting": {
-		"urlCheck": false,
-		"es6": false,
-		"postcss": false,
-		"minified": false,
-		"newFeature": true,
-		"coverView": true,
-		"autoAudits": false,
-		"showShadowRootInWxmlPanel": true,
-		"scopeDataCheck": false,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
-	},
-	"compileType": "miniprogram",
-	"appid": "wx5d8a4849a36d18ce",
-	"projectname": "snack-bar-pro",
-	"miniprogramRoot": "weapp/",
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"condition": {}
+  "description": "snack bar pro mini program",
+  "setting": {
+    "urlCheck": false,
+    "es6": false,
+    "postcss": false,
+    "minified": false,
+    "newFeature": true,
+    "coverView": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "useMultiFrameRuntime": true,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "bundle": false,
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "useApiHostProcess": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wx5d8a4849a36d18ce",
+  "projectname": "snack-bar-pro",
+  "miniprogramRoot": "weapp/",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {}
 }

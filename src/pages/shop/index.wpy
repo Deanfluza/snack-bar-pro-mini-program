@@ -1,11 +1,11 @@
 <template>
   <div class="page_tab_h" style="display: flex;overflow: hidden;">
-    <div style="background: #fafafa; height: 625px">
+    <div style="background: #fafafa; height: 700px">
       <van-sidebar v-model="activeKey" bind:change="onChange">
         <van-sidebar-item v-for="sideBarItem in sideBarList" :title="sideBarItem.title" :badge="sideBarItem.badge"/>
       </van-sidebar>
     </div>
-    <scroll-view scroll-y style="height: 625px" scroll-into-view="{{toView}}" bindscroll="scrollTo">
+    <scroll-view scroll-y style="height: 700px" scroll-into-view="{{toView}}" bindscroll="scrollTo">
       <div v-for="sideBarItem in sideBarList">
         <div :id="sideBarItem.type">
           <div class="item-title">
