@@ -60,7 +60,7 @@ wepy.page({
         mapX: 290,
         mapY: 450,
         target: {
-          title: 'Home',
+          title: '白令门口',
           position: {
             x: 0.0884503321905,
             y: 0.028505974591,
