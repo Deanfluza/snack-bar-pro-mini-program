@@ -5,6 +5,7 @@
                 is-link
                 bind:click="showOrderDetail"
                 data-orderNumber ="{{order.orderNumber}}"
+                data-orderStatus = "{{order.orderStatus}}"
       >
         <view slot="title">
           <view class="van-cell-text">Order: {{ order.orderNumber }}</view>
@@ -69,9 +70,10 @@ wepy.page({
   },
   methods: {
     showOrderDetail: function(e) {
-      const { ordernumber, orderStatus } = e.currentTarget.dataset
+      const { ordernumber, orderstatus } = e.currentTarget.dataset
+      console.log(e.currentTarget.dataset)
       this.selectedOrderNumber = ordernumber
-      this.isShowDialogConfirmButton = orderStatus === 'reached'
+      this.isShowDialogConfirmButton = orderstatus === 'reached'
       this.isShowOrderDetailDialog = true
     },
     completeOrder: function() {
