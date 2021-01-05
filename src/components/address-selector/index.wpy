@@ -3,22 +3,25 @@
     <van-notice-bar
       speed="{{30}}"
       left-icon="volume-o"
-      text="please select a address before you submit your order!"
+      text="下单前请选择地址"
     />
     <van-cell
-      is-link
+      title-class="title-font"
+      value-class="value-font"
       title="{{ tip }}"
+      is-link
+      :value="title || ''"
       link-type="navigateTo"
       url="/pages/address/index"
     />
-    <div style="background: #ffffff;border-radius: 0 0 15px 15px;height: 50px;">
-      <div style="margin-left: 15px; margin-right: 15px;padding-top: 17px;">
-        <van-row v-if="isSelectedAddress" style="font-size: 16px; font-weight: bold; line-height: 16px;">
-          <van-col span="8">Address:</van-col>
-          <van-col span="16" style="text-align: right">{{title || 'please select an address'}}</van-col>
-        </van-row>
-      </div>
-    </div>
+<!--    <div style="background: #ffffff;border-radius: 0 0 15px 15px;height: 50px;">-->
+<!--      <div style="margin-left: 15px; margin-right: 15px;padding-top: 17px;">-->
+<!--        <van-row v-if="isSelectedAddress" style="font-size: 16px; font-weight: bold; line-height: 16px;">-->
+<!--          <van-col span="8">Address:</van-col>-->
+<!--          <van-col span="16" style="text-align: right">{{title || '请选择地址'}}</van-col>-->
+<!--        </van-row>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 
 </template>
@@ -29,7 +32,7 @@ import _ from 'lodash'
 wepy.component({
   data: {
     selectedAddr: undefined,
-    tip: 'Click here to select an address.'
+    tip: '地址:'
   },
   props: {
     title: {
@@ -47,6 +50,19 @@ wepy.component({
 </script>
 
 <style>
+  .title-font{
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 16px;
+  }
+  .value-font{
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    line-height: 16px;
+  }
   .van-cell {
     border-radius: 15px 15px 0 0 !important;
   }
