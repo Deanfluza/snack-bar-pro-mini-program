@@ -58,11 +58,11 @@ wepy.page({
     },
     orderListModel: function() {
       const statusMap = new Map([
-        ['pending', {type: 'default', text: 'Pending'}],
-        ['processing', {type: 'warning', text: 'Processing'}],
-        ['reached', {type: 'primary', text: 'Car Reached'}],
-        ['completed', {type: 'success', text: 'Completed'}],
-        ['error', {type: 'danger', text: 'Error'}]
+        ['pending', {type: 'default', text: '等待中'}],
+        ['processing', {type: 'warning', text: '运输中'}],
+        ['reached', {type: 'primary', text: '已送达'}],
+        ['completed', {type: 'success', text: '已完成'}],
+        ['error', {type: 'danger', text: '错误'}]
       ]);
       let model = this.orderList
       model.forEach((order) => {
