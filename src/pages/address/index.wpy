@@ -1,13 +1,27 @@
 <template>
-  <scroll-view :scroll-x="true" :style="{width: '100%', height: scrollHeight + 'px'}">
-    <point @change="goBack" v-for="position in positionArr" :x="position.mapX * xPositionPercentage" :y="position.mapY * yPositionPercentage" :target="position.target"/>
-    <image mode="heightFix" src="{{baseUrl}}/static/image/17F.png" :style="{height: scrollHeight + 'px'}" id="map"/>
+  <scroll-view
+    :scroll-x="true"
+    :style="{ width: '100%', height: scrollHeight + 'px' }"
+  >
+    <point
+      @change="goBack"
+      v-for="position in positionArr"
+      :x="position.mapX * xPositionPercentage"
+      :y="position.mapY * yPositionPercentage"
+      :target="position.target"
+    />
+    <image
+      mode="heightFix"
+      src="{{baseUrl}}/static/image/B6_3F.png"
+      :style="{ height: scrollHeight + 'px' }"
+      id="map"
+    />
   </scroll-view>
 </template>
 
 <script>
-import wepy from '@wepy/core'
-import { baseUrl } from '../../common/constant'
+import wepy from '@wepy/core';
+import { baseUrl } from '../../common/constant';
 
 wepy.page({
   data: {
@@ -17,12 +31,47 @@ wepy.page({
     xPositionPercentage: 1,
     yPositionPercentage: 1,
     positionArr: [
-      // 正门中间
       {
-        mapX: 340,
+        mapX: 390,
         mapY: 340,
         target: {
-          title: '正门中间',
+          title: '茶水间A',
+          position: {
+            x: 11.4004537111,
+            y: -0.142694813179,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: -0.745214286589,
+            w: 0.666825064813
+          }
+        }
+      },
+      {
+        mapX: 390,
+        mapY: 255,
+        target: {
+          title: '茶水间B',
+          position: {
+            x: 6.79692546015,
+            y: -0.42290091604,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: -0.0395794958444,
+            w: 0.999216424759
+          }
+        }
+      },
+      {
+        mapX: 1000,
+        mapY: 455,
+        target: {
+          title: '会议室A',
           position: {
             x: 2.68363808079,
             y: 6.80853573008,
@@ -36,83 +85,155 @@ wepy.page({
           }
         }
       },
-      // 直布罗陀门口
       {
-        mapX: 288,
-        mapY: 230,
+        mapX: 800,
+        mapY: 165,
         target: {
-          title: '直布罗陀门口',
+          title: '会议室B',
           position: {
-            x: 0.514645951874,
-            y: 12.6679961835,
+            x: 2.68363808079,
+            y: 6.80853573008,
             z: 0.0
           },
           orientation: {
             x: 0.0,
             y: 0.0,
-            z: -0.0940360150357,
-            w: 0.995568796154
-          }
-        }
-      },
-      // Home
-      {
-        mapX: 290,
-        mapY: 450,
-        target: {
-          title: '白令门口',
-          position: {
-            x: 0.0884503321905,
-            y: 0.028505974591,
-            z: 0.0
-          },
-          orientation: {
-            x: 0.0,
-            y: 0.0,
-            z: 0.00310461688896,
-            w: 0.999995180665
+            z: 0.800972518881,
+            w: 0.598701114078
           }
         }
       },
       {
-        mapX: 340,
-        mapY: 433,
+        mapX: 370,
+        mapY: 110,
         target: {
-          title: '校长室门口沙发中间',
+          title: '休闲区',
           position: {
-            x: 2.43486119341,
-            y: 1.216540979,
+            x: -0.232111465808,
+            y: -0.315591277496,
             z: 0.0
           },
           orientation: {
             x: 0.0,
             y: 0.0,
-            z: 0.747691761442,
-            w: 0.664045954638
+            z: -0.0011861772016,
+            w: 0.999999296492
+          }
+        }
+      },
+      {
+        mapX: 388,
+        mapY: 415,
+        target: {
+          title: '工作区A',
+          position: {
+            x: 14.2835429119,
+            y: -0.154034425051,
+            z: 0.0
+          },
+          orientation: {
+            x: 0.0,
+            y: 0.0,
+            z: -0.0308382167036,
+            w: 0.999524389092
           }
         }
       }
+      // // 正门中间
+      // {
+      //   mapX: 340,
+      //   mapY: 340,
+      //   target: {
+      //     title: '正门中间',
+      //     position: {
+      //       x: 2.68363808079,
+      //       y: 6.80853573008,
+      //       z: 0.0
+      //     },
+      //     orientation: {
+      //       x: 0.0,
+      //       y: 0.0,
+      //       z: 0.800972518881,
+      //       w: 0.598701114078
+      //     }
+      //   }
+      // },
+      // // 直布罗陀门口
+      // {
+      //   mapX: 288,
+      //   mapY: 230,
+      //   target: {
+      //     title: '直布罗陀门口',
+      //     position: {
+      //       x: 0.514645951874,
+      //       y: 12.6679961835,
+      //       z: 0.0
+      //     },
+      //     orientation: {
+      //       x: 0.0,
+      //       y: 0.0,
+      //       z: -0.0940360150357,
+      //       w: 0.995568796154
+      //     }
+      //   }
+      // },
+      // // Home
+      // {
+      //   mapX: 290,
+      //   mapY: 450,
+      //   target: {
+      //     title: '白令门口',
+      //     position: {
+      //       x: 0.0884503321905,
+      //       y: 0.028505974591,
+      //       z: 0.0
+      //     },
+      //     orientation: {
+      //       x: 0.0,
+      //       y: 0.0,
+      //       z: 0.00310461688896,
+      //       w: 0.999995180665
+      //     }
+      //   }
+      // },
+      // {
+      //   mapX: 340,
+      //   mapY: 433,
+      //   target: {
+      //     title: '校长室门口沙发中间',
+      //     position: {
+      //       x: 2.43486119341,
+      //       y: 1.216540979,
+      //       z: 0.0
+      //     },
+      //     orientation: {
+      //       x: 0.0,
+      //       y: 0.0,
+      //       z: 0.747691761442,
+      //       w: 0.664045954638
+      //     }
+      //   }
+      // }
     ]
   },
   methods: {
     goBack(point) {
-      this.$navigate('../order/index', point)
+      this.$navigate('../order/index', point);
     }
   },
   ready() {
     // this.scrollWidth = wx.getSystemInfoSync().windowWidth
     // -tabbar height
-    this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50
-    const originWidth = 863
-    const originHeight = 621
-    const resetWidth = originWidth * this.scrollHeight / originHeight
-    this.xPositionPercentage = resetWidth / 936.64
-    this.yPositionPercentage = this.scrollHeight / 674
+    this.scrollHeight = wx.getSystemInfoSync().windowHeight - 50;
+    const originWidth = 863;
+    const originHeight = 621;
+    const resetWidth = (originWidth * this.scrollHeight) / originHeight;
+    this.xPositionPercentage = resetWidth / 936.64;
+    this.yPositionPercentage = this.scrollHeight / 674;
   }
-})
+});
 </script>
 <style>
-
 </style>
 <config>
 {
